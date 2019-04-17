@@ -1,0 +1,2 @@
+# hrodvitnir-core
+TBD
