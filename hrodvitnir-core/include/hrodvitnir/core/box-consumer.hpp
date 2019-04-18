@@ -31,6 +31,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #pragma once
+#include <hrodvitnir/core/uuid.hpp>
 #include <hrodvitnir/core/fieldset.hpp>
 
 namespace hrodvitnir::core
@@ -40,6 +41,7 @@ namespace hrodvitnir::core
     public:
         using ptr = std::shared_ptr<box_consumer>;
 
+        virtual void box_announce(uint64_t position, const uuid& id) = 0;
         virtual void box_open(const std::shared_ptr<fieldset>& fs) = 0;
         virtual void box_close(uint64_t position) = 0;
 

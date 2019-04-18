@@ -48,6 +48,7 @@ namespace hrodvitnir::core
                 boxes::default_box_t box{*fs};
 
                 box.read_basic(reader);
+                consumer->box_announce(box.box_pos(), box.uuid);
                 const auto& partial = mapping->get(box.uuid);
                 partial(*fs, reader);
 
