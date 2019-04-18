@@ -30,22 +30,37 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#pragma once
-#include <cstddef>
-#include <utility>
-#include <bitcommons/bitreader-utils.hpp>
+#include <hrodvitnir/core/tree/tree-builder.hpp>
 
-namespace hrodvitnir::brext
+namespace hrodvitnir::core
 {
-    template<typename T>
-    struct array_reader
+    //--------------------------------------------------------------------------
+    tree_builder::tree_builder()
     {
-        template<typename Reader, typename Iter, typename... Args>
-        static void read(Reader& r, Iter iter, size_t count, Args&&... args)
-        {
-            for (size_t i = 0; i < count; ++i) {
-                *iter = r.template read<T>(std::forward<Args>(args)...);
-            }
+        _tree = std::make_shared<tree>();
+    }
+
+    //--------------------------------------------------------------------------
+    void tree_builder::box_open(const std::shared_ptr<fieldset>& fs)
+    {
+        auto node = std::make_shared<tree_node>(fs);
+        if (_stack.empty()) {
+            _tree->add_child(node);
+        } else {
+            _stack.top()->add_child(node);
         }
-    };
+        _stack.push(node);
+    }
+
+    //--------------------------------------------------------------------------
+    void tree_builder::box_close(uint64_t position)
+    {
+        _stack.pop();
+    }
+
+    //--------------------------------------------------------------------------
+    tree::ptr tree_builder::get() const
+    {
+        return _tree; // TODO: Make it an honest const
+    }
 }

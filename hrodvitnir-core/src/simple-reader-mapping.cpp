@@ -30,22 +30,30 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#pragma once
-#include <cstddef>
-#include <utility>
-#include <bitcommons/bitreader-utils.hpp>
+#include <hrodvitnir/core/parser/simple-reader-mapping.hpp>
 
-namespace hrodvitnir::brext
+namespace hrodvitnir::core
 {
-    template<typename T>
-    struct array_reader
+    //--------------------------------------------------------------------------
+    simple_reader_mapping::simple_reader_mapping(const partial_reader_type& def_rd)
     {
-        template<typename Reader, typename Iter, typename... Args>
-        static void read(Reader& r, Iter iter, size_t count, Args&&... args)
-        {
-            for (size_t i = 0; i < count; ++i) {
-                *iter = r.template read<T>(std::forward<Args>(args)...);
-            }
+        _default = def_rd;
+    }
+
+    //--------------------------------------------------------------------------
+    const partial_reader_type& simple_reader_mapping::get(const uuid& u) const
+    {
+        auto iter = _registry.find(u);
+        if (iter != _registry.end()) {
+            return iter->second;
+        } else {
+            return _default;
         }
-    };
+    }
+
+    //--------------------------------------------------------------------------
+    void simple_reader_mapping::default_reader(fieldset& fs, reader_type& r)
+    {
+        boxes::default_box_t{fs}.read(r);
+    }
 }

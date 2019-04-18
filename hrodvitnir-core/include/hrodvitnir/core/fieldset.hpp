@@ -36,7 +36,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <any>
 #include <hrodvitnir/core/ce_crc64.hpp>
 
-namespace hrodvitnir
+namespace hrodvitnir::core
 {
     //------------------------------------------------------------------------------
     // FIELDSET
@@ -44,58 +44,15 @@ namespace hrodvitnir
     struct fieldset
     {
         //----------------------------------------------------------------------
-        const std::any& get(uint64_t key) const
-        {
-            return _fields.at(key);
-        }
-
-        //----------------------------------------------------------------------
-        std::any& get(uint64_t key)
-        {
-            return _fields.at(key);
-        }
-
-        //----------------------------------------------------------------------
-        const std::any& get(const char* str) const
-        {
-            return _fields.at(const_crc64(str));
-        }
-
-        //----------------------------------------------------------------------
-        std::any& get(const char* str)
-        {
-            return _fields.at(const_crc64(str));
-        }
-
-        //----------------------------------------------------------------------
-        const std::any& get(const std::string& str) const
-        {
-            return _fields.at(const_crc64(str.c_str()));
-        }
-
-        //----------------------------------------------------------------------
-        std::any& get(const std::string& str)
-        {
-            return _fields.at(const_crc64(str.c_str()));
-        }
-
-        //----------------------------------------------------------------------
-        void set(uint64_t key, std::any&& val)
-        {
-            _fields[key] = val;
-        }
-
-        //----------------------------------------------------------------------
-        void set(const char* str, std::any&& val)
-        {
-            set(const_crc64(str), std::move(val));
-        }
-
-        //----------------------------------------------------------------------
-        void set(const std::string& str, std::any&& val)
-        {
-            set(str.c_str(), std::move(val));
-        }
+        const std::any& get(uint64_t key) const;
+        std::any& get(uint64_t key);
+        const std::any& get(const char* str) const;
+        std::any& get(const char* str);
+        const std::any& get(const std::string& str) const;
+        std::any& get(const std::string& str);
+        void set(uint64_t key, std::any&& val);
+        void set(const char* str, std::any&& val);
+        void set(const std::string& str, std::any&& val);
 
         //----------------------------------------------------------------------
         std::unordered_map<uint64_t, std::any> _fields;

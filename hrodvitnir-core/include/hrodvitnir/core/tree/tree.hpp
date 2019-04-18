@@ -43,18 +43,9 @@ namespace hrodvitnir::core
         using ptr = std::shared_ptr<tree>;
 
         tree() = default;
+        void add_child(tree_node::ptr child);
+        const std::list<tree_node::ptr> children() const;
 
-        //----------------------------------------------------------------------
-        void add_child(tree_node::ptr child)
-        {
-            _children.push_back(child);
-        }
-
-        //----------------------------------------------------------------------
-        const std::list<tree_node::ptr> children() const
-        {
-            return _children;
-        }
     private:
         tree(const tree&) = delete;
         tree& operator=(const tree&) = delete;

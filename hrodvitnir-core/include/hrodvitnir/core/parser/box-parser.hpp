@@ -45,43 +45,6 @@ namespace hrodvitnir::core
         void parse(
                 reader_type& reader,
                 reader_mapping::ptr mapping,
-                box_consumer::ptr consumer
-                )
-        {
-            std::stack<uint64_t> box_ends;
-
-            try {
-                while (reader.available() > 0) {
-                    auto fs = std::make_shared<fieldset>();
-                    boxes::default_box_t box{*fs};
-
-                    box.read_basic(reader);
-                    const auto& partial = mapping->get(box.uuid);
-                    partial(*fs, reader);
-
-                    uint64_t current_pos = reader.position() / 8;
-                    uint64_t current_end = box.box_end();
-
-                    consumer->box_open(fs);
-                    if (current_pos == current_end) {
-                        consumer->box_close(current_end);
-                    } else {
-                        box_ends.push(current_end);
-                    }
-
-                    while (!box_ends.empty() && box_ends.top() <= current_pos) {
-                        auto end = box_ends.top();
-                        box_ends.pop();
-                        consumer->box_close(end);
-                    }
-                }
-            } catch (const std::exception& e) {
-                while (!box_ends.empty()) {
-                    consumer->box_close(box_ends.top());
-                    box_ends.pop();
-                }
-                // nope
-            }
-        }
+                box_consumer::ptr consumer);
     };
 }

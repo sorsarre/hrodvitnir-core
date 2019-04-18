@@ -32,8 +32,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #pragma once
 #include <cstdint>
+#include <cstddef>
+#include <string>
 
-namespace hrodvitnir
+namespace hrodvitnir::core
 {
     class fourcc
     {
@@ -56,15 +58,7 @@ namespace hrodvitnir
         }
 
         //----------------------------------------------------------------------
-        std::string string() const {
-            // TODO: Escape non-printale characters
-            std::string ret = "0000";
-            for (size_t iter = 0; iter < 4; ++iter) {
-                ret[iter] = static_cast<char>((_data >> (8 * (3 - iter))) & 0xFF);
-            }
-
-            return ret;
-        }
+        std::string string() const;
 
         //----------------------------------------------------------------------
         constexpr uint32_t value() const { return _data; }

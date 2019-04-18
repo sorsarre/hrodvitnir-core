@@ -38,7 +38,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <hrodvitnir/core/meta-helpers.hpp>
 #include <hrodvitnir/core/bitreader-helpers.hpp>
 
-namespace hrodvitnir
+namespace hrodvitnir::core
 {
     //--------------------------------------------------------------------------
     template<size_t Bits>

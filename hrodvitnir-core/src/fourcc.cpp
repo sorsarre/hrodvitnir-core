@@ -30,22 +30,19 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#pragma once
-#include <cstddef>
-#include <utility>
-#include <bitcommons/bitreader-utils.hpp>
+#include <hrodvitnir/core/fourcc.hpp>
 
-namespace hrodvitnir::brext
+namespace hrodvitnir::core
 {
-    template<typename T>
-    struct array_reader
+    //--------------------------------------------------------------------------
+    std::string fourcc::string() const
     {
-        template<typename Reader, typename Iter, typename... Args>
-        static void read(Reader& r, Iter iter, size_t count, Args&&... args)
-        {
-            for (size_t i = 0; i < count; ++i) {
-                *iter = r.template read<T>(std::forward<Args>(args)...);
-            }
+        // TODO: Escape non-printale characters
+        std::string ret = "0000";
+        for (size_t iter = 0; iter < 4; ++iter) {
+            ret[iter] = static_cast<char>((_data >> (8 * (3 - iter))) & 0xFF);
         }
-    };
+
+        return ret;
+    }
 }

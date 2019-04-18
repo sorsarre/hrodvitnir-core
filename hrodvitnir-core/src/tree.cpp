@@ -30,22 +30,19 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#pragma once
-#include <cstddef>
-#include <utility>
-#include <bitcommons/bitreader-utils.hpp>
+#include <hrodvitnir/core/tree/tree.hpp>
 
-namespace hrodvitnir::brext
+namespace hrodvitnir::core
 {
-    template<typename T>
-    struct array_reader
+    //--------------------------------------------------------------------------
+    void tree::add_child(tree_node::ptr child)
     {
-        template<typename Reader, typename Iter, typename... Args>
-        static void read(Reader& r, Iter iter, size_t count, Args&&... args)
-        {
-            for (size_t i = 0; i < count; ++i) {
-                *iter = r.template read<T>(std::forward<Args>(args)...);
-            }
-        }
-    };
+        _children.push_back(child);
+    }
+
+    //--------------------------------------------------------------------------
+    const std::list<tree_node::ptr> tree::children() const
+    {
+        return _children;
+    }
 }

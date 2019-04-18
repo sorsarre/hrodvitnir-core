@@ -35,7 +35,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <hrodvitnir/core/fieldset.hpp>
 #include <hrodvitnir/core/uuid.hpp>
 
-namespace hrodvitnir
+namespace hrodvitnir::core
 {
     //------------------------------------------------------------------------------
     // HELL BEGINS (BOX BINDINGS OVER FIELDSET)

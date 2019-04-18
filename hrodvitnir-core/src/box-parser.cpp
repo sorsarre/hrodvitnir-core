@@ -30,22 +30,49 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#pragma once
-#include <cstddef>
-#include <utility>
-#include <bitcommons/bitreader-utils.hpp>
+#include <hrodvitnir/core/parser/box-parser.hpp>
 
-namespace hrodvitnir::brext
+namespace hrodvitnir::core
 {
-    template<typename T>
-    struct array_reader
+    void box_parser::parse(
+            reader_type& reader,
+            reader_mapping::ptr mapping,
+            box_consumer::ptr consumer
+            )
     {
-        template<typename Reader, typename Iter, typename... Args>
-        static void read(Reader& r, Iter iter, size_t count, Args&&... args)
-        {
-            for (size_t i = 0; i < count; ++i) {
-                *iter = r.template read<T>(std::forward<Args>(args)...);
+        std::stack<uint64_t> box_ends;
+
+        try {
+            while (reader.available() > 0) {
+                auto fs = std::make_shared<fieldset>();
+                boxes::default_box_t box{*fs};
+
+                box.read_basic(reader);
+                const auto& partial = mapping->get(box.uuid);
+                partial(*fs, reader);
+
+                uint64_t current_pos = reader.position() / 8;
+                uint64_t current_end = box.box_end();
+
+                consumer->box_open(fs);
+                if (current_pos == current_end) {
+                    consumer->box_close(current_end);
+                } else {
+                    box_ends.push(current_end);
+                }
+
+                while (!box_ends.empty() && box_ends.top() <= current_pos) {
+                    auto end = box_ends.top();
+                    box_ends.pop();
+                    consumer->box_close(end);
+                }
             }
+        } catch (const std::exception& e) {
+            while (!box_ends.empty()) {
+                consumer->box_close(box_ends.top());
+                box_ends.pop();
+            }
+            // nope
         }
-    };
+    }
 }

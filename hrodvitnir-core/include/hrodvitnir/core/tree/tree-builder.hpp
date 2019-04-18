@@ -38,41 +38,15 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 namespace hrodvitnir::core
 {
-    //--------------------------------------------------------------------------
     class tree_builder: public box_consumer
     {
     public:
         using ptr = std::shared_ptr<tree_builder>;
 
-        //----------------------------------------------------------------------
-        tree_builder()
-        {
-            _tree = std::make_shared<tree>();
-        }
-
-        //----------------------------------------------------------------------
-        void box_open(const std::shared_ptr<fieldset>& fs) override
-        {
-            auto node = std::make_shared<tree_node>(fs);
-            if (_stack.empty()) {
-                _tree->add_child(node);
-            } else {
-                _stack.top()->add_child(node);
-            }
-            _stack.push(node);
-        }
-
-        //----------------------------------------------------------------------
-        void box_close(uint64_t position) override
-        {
-            _stack.pop();
-        }
-
-        //----------------------------------------------------------------------
-        tree::ptr get() const
-        {
-            return _tree; // TODO: Make it an honest const
-        }
+        tree_builder();
+        void box_open(const std::shared_ptr<fieldset>& fs) override;
+        void box_close(uint64_t position) override;
+        tree::ptr get() const;
 
     private:
         std::stack<tree_node::ptr> _stack;

@@ -34,6 +34,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <unordered_map>
 #include <cstdint>
 #include <memory>
+#include <vector>
 #include <hrodvitnir/core/fieldset.hpp>
 
 namespace hrodvitnir::core
@@ -43,54 +44,19 @@ namespace hrodvitnir::core
     public:
         using ptr = std::shared_ptr<tree_node>;
 
-        //----------------------------------------------------------------------
-        tree_node(std::shared_ptr<fieldset> fs): _value(fs)
-        {
-            _position = std::any_cast<uint64_t>(fs->get("__pos"_crc64));
-            _size = std::any_cast<uint64_t>(fs->get("__size"_crc64));
-        }
+        tree_node(std::shared_ptr<fieldset> fs);
+        uint64_t position() const;
+        uint64_t size() const;
+        uint64_t end() const;
+        const std::vector<tree_node::ptr>& children() const;
+        void add_child(tree_node::ptr child);
+        const std::shared_ptr<fieldset>& get() const;
 
-        //----------------------------------------------------------------------v
-        uint64_t position() const
-        {
-            return _position;
-        }
-
-        //----------------------------------------------------------------------
-        uint64_t size() const
-        {
-            return _size;
-        }
-
-        //----------------------------------------------------------------------
-        uint64_t end() const
-        {
-            return _position + _size;
-        }
-
-        //----------------------------------------------------------------------
-        const std::vector<tree_node::ptr>& children() const
-        {
-            return _children;
-        }
-
-        //----------------------------------------------------------------------
-        void add_child(tree_node::ptr child)
-        {
-            _children.push_back(child);
-        }
-
-        //----------------------------------------------------------------------
-        const std::shared_ptr<fieldset>& get() const
-        {
-            return _value;
-        }
-
-    private:
         tree_node() = delete;
         tree_node(const tree_node&) = delete;
         tree_node& operator=(const tree_node&) = delete;
 
+    private:
         uint64_t _position;
         uint64_t _size;
         std::shared_ptr<fieldset> _value;

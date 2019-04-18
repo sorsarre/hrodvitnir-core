@@ -30,22 +30,50 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#pragma once
-#include <cstddef>
-#include <utility>
-#include <bitcommons/bitreader-utils.hpp>
+#include <hrodvitnir/core/tree/tree-node.hpp>
 
-namespace hrodvitnir::brext
+namespace hrodvitnir::core
 {
-    template<typename T>
-    struct array_reader
+    //--------------------------------------------------------------------------
+    tree_node::tree_node(std::shared_ptr<fieldset> fs): _value(fs)
     {
-        template<typename Reader, typename Iter, typename... Args>
-        static void read(Reader& r, Iter iter, size_t count, Args&&... args)
-        {
-            for (size_t i = 0; i < count; ++i) {
-                *iter = r.template read<T>(std::forward<Args>(args)...);
-            }
-        }
-    };
+        _position = std::any_cast<uint64_t>(fs->get("__pos"_crc64));
+        _size = std::any_cast<uint64_t>(fs->get("__size"_crc64));
+    }
+
+    //--------------------------------------------------------------------------
+    uint64_t tree_node::position() const
+    {
+        return _position;
+    }
+
+    //--------------------------------------------------------------------------
+    uint64_t tree_node::size() const
+    {
+        return _size;
+    }
+
+    //--------------------------------------------------------------------------
+    uint64_t tree_node::end() const
+    {
+        return _position + _size;
+    }
+
+    //--------------------------------------------------------------------------
+    const std::vector<tree_node::ptr>& tree_node::children() const
+    {
+        return _children;
+    }
+
+    //--------------------------------------------------------------------------
+    void tree_node::add_child(tree_node::ptr child)
+    {
+        _children.push_back(child);
+    }
+
+    //--------------------------------------------------------------------------
+    const std::shared_ptr<fieldset>& tree_node::get() const
+    {
+        return _value;
+    }
 }

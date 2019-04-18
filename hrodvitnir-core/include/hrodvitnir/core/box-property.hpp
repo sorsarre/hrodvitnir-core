@@ -36,7 +36,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <hrodvitnir/core/ce_crc64.hpp>
 #include <hrodvitnir/core/fieldset.hpp>
 
-namespace hrodvitnir
+namespace hrodvitnir::core
 {
     //------------------------------------------------------------------------------
     // this is the one way to get this into a member, along with the name

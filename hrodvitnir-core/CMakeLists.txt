@@ -27,11 +27,28 @@ set(HRODVITNIR_CORE_HEADERS
         include/hrodvitnir/core/tree/tree-node.hpp
 )
 
-add_library(hrodvitnir-core INTERFACE)
+set(HRODVITNIR_CORE_SOURCES
+        src/tree.cpp
+        src/tree-builder.cpp
+        src/tree-node.cpp
+        src/fieldset.cpp
+        src/fourcc.cpp
+        src/uuid.cpp
+        src/box-parser.cpp
+        src/simple-reader-mapping.cpp
+        )
+
+add_library(hrodvitnir-core STATIC ${HRODVITNIR_CORE_SOURCES} ${HRODVITNIR_CORE_HEADERS})
+target_include_directories(hrodvitnir-core PRIVATE
+        ${CMAKE_CURRENT_LIST_DIR}/include)
 target_include_directories(hrodvitnir-core INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>
-    $<INSTALL_INTERFACE:include>
-    )
+    $<INSTALL_INTERFACE:include>)
+target_link_libraries(hrodvitnir-core bitcommonscpp)
+set_target_properties(hrodvitnir-core PROPERTIES
+        CXX_STANDARD 17
+        CXX_STANDARD_REQUIRED ON)
+
 
 install(TARGETS hrodvitnir-core
         EXPORT hrodvitnir-core-export
