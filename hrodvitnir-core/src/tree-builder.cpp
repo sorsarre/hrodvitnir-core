@@ -41,6 +41,12 @@ namespace hrodvitnir::core
     }
 
     //--------------------------------------------------------------------------
+    void tree_builder::box_announce(uint64_t position, const uuid& id)
+    {
+        // nope, nothing to do here
+    }
+
+    //--------------------------------------------------------------------------
     void tree_builder::box_open(const std::shared_ptr<fieldset>& fs)
     {
         auto node = std::make_shared<tree_node>(fs);

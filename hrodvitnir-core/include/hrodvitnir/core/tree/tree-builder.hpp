@@ -44,6 +44,7 @@ namespace hrodvitnir::core
         using ptr = std::shared_ptr<tree_builder>;
 
         tree_builder();
+        void box_announce(uint64_t position, const uuid& id) override;
         void box_open(const std::shared_ptr<fieldset>& fs) override;
         void box_close(uint64_t position) override;
         tree::ptr get() const;
