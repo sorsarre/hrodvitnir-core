@@ -46,11 +46,11 @@ else()
 endif()
 
 install(TARGETS bitcommonscpp
-        EXPORT bitcommonscpp-export
+        EXPORT bitcommonscpp
         RUNTIME DESTINATION bin
         LIBRARY DESTINATION lib
         ARCHIVE DESTINATION lib
         )
 
 install(DIRECTORY include/bitcommons DESTINATION include)
-install(EXPORT bitcommonscpp-export DESTINATION cmake NAMESPACE Hrodvitnir::)
+install(EXPORT bitcommonscpp DESTINATION cmake NAMESPACE Hrodvitnir::)

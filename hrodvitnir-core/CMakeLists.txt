@@ -51,11 +51,11 @@ set_target_properties(hrodvitnir-core PROPERTIES
 
 
 install(TARGETS hrodvitnir-core
-        EXPORT hrodvitnir-core-export
+        EXPORT hrodvitnir-core
         RUNTIME DESTINATION bin
         LIBRARY DESTINATION lib
         ARCHIVE DESTINATION lib
         )
 
 install(DIRECTORY include/hrodvitnir DESTINATION include)
-install(EXPORT hrodvitnir-core-export DESTINATION cmake NAMESPACE Hrodvitnir::)
+install(EXPORT hrodvitnir-core DESTINATION cmake NAMESPACE Hrodvitnir::)

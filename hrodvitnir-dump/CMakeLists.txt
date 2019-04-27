@@ -46,3 +46,7 @@ if (NOT WIN32)
         COMPILE_FLAGS "-Wall -pedantic"
     )
 endif()
+
+install(TARGETS hrodvitnir-dump
+    RUNTIME DESTINATION bin
+)
