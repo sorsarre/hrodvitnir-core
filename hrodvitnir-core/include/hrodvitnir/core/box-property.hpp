@@ -100,38 +100,6 @@ namespace hrodvitnir::core
     };
 
     //------------------------------------------------------------------------------
-    // this is kinda obsolete, skip further
-    template<typename Value, uint64_t Hash>
-    struct mapped_property: public named_property<Hash>
-    {
-        mapped_property(property_initializer&& init): named_property<Hash>(init.name)
-        {
-            auto raw_ptr = reinterpret_cast<uint8_t*>(this);
-            auto begin_ptr = reinterpret_cast<uint8_t*>(init.host) + sizeof(void*);
-            auto diff = raw_ptr - begin_ptr;
-            this->index = diff;
-        }
-
-        mapped_property<Value, Hash>& operator=(const Value& val)
-        {
-
-            this->__get_target()->set(Hash, val);
-            return *this;
-        }
-
-        operator const Value&() const
-        {
-            return std::any_cast<const Value&>(this->__get_target()->get(Hash));
-        }
-
-        operator Value&()
-        {
-            return std::any_cast<Value&>(this->__get_target()->get(Hash));
-        }
-
-
-    };
-
     template<typename Reader, typename... Args>
     struct read_argument_helper
     {
@@ -226,5 +194,4 @@ namespace hrodvitnir::core
     };
 }
 
-#define BLACK_MAGICK(Prop, Type) mapped_property<Type, #Prop ## _crc64> Prop = property_initializer{&this->__box, #Prop}
 #define MUCH_BLACKER_MAGICK(Prop, ...) read_mapped_property<__VA_ARGS__, #Prop ## _crc64> Prop = property_initializer{&this->__box, #Prop}
