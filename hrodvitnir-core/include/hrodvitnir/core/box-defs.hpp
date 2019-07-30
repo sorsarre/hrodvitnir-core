@@ -49,6 +49,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <hrodvitnir/core/boxes/pixel-aspect-ratio-box.hpp>
 #include <hrodvitnir/core/boxes/clean-aperture-box.hpp>
 
+#include <hrodvitnir/core/boxes/edit-list-box.hpp>
+
 namespace hrodvitnir::core::boxes
 {
     template<template<typename Base> class... Args>
@@ -75,4 +77,6 @@ namespace hrodvitnir::core::boxes
 
     using pasp_box_t = data_box_binding_t<pixel_aspect_ratio>;
     using clap_box_t = data_box_binding_t<clean_aperture>;
+
+    using elst_box_t = data_box_binding_t<full_box, edit_list>;
 }

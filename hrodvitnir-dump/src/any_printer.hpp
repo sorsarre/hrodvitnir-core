@@ -40,6 +40,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <hrodvitnir/core/fourcc.hpp>
 #include <hrodvitnir/core/uuid.hpp>
 #include <hrodvitnir/core/tree/tree.hpp>
+#include <hrodvitnir/core/boxes/edit-list-box.hpp>
 
 namespace hrodvitnir::dump
 {
@@ -156,6 +157,15 @@ namespace hrodvitnir::dump
             register_printer<std::vector<double>>(list_printer);
             register_printer<std::vector<uint16_t>>(list_printer);
             register_printer<std::vector<char>>(list_printer);
+            register_printer<std::vector<core::boxes::edit_list_item>>(list_printer);
+
+            register_printer<core::boxes::edit_list_item>([](auto& o, const core::boxes::edit_list_item& edit) {
+                o << "{ segment_duration=" << edit.segment_duration
+                    << ", media_time=" << edit.media_time
+                    << ", media_rate_integer=" << edit.media_rate_integer
+                    << ", media_rate_fraction=" << edit.media_rate_fraction
+                    << "}";
+            });
 
             register_printer<core::fourcc>([](auto& o, const core::fourcc& fcc) {
                 o << fcc.string();

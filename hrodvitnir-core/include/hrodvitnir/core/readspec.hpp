@@ -221,6 +221,23 @@ namespace hrodvitnir::core
     };
 
     //--------------------------------------------------------------------------
+    template<template<typename...> typename Container, typename ItemSpec>
+    struct r_arg_items_arg {
+        using item_type = typename ItemSpec::value_type;
+        using value_type = Container<item_type>;
+
+        template<typename Reader, typename... Args>
+        static value_type read(Reader& r, size_t count, Args&&... args)
+        {
+            value_type ret;
+            for (size_t iter = 0; iter < count; ++iter) {
+                ret.emplace_back(ItemSpec::read(r, std::forward<Args>(args)...));
+            }
+            return ret;
+        }
+    };
+
+    //--------------------------------------------------------------------------
     template<template<typename...> typename Container, typename ItemSpec, size_t Size>
     struct r_items_fixed {
         using item_type = typename ItemSpec::value_Type;
