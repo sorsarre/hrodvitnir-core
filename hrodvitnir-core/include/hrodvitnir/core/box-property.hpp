@@ -33,6 +33,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #pragma once
 #include <unordered_map>
 #include <string>
+#include <utility>
 #include <hrodvitnir/core/ce_crc64.hpp>
 #include <hrodvitnir/core/fieldset.hpp>
 
@@ -131,24 +132,10 @@ namespace hrodvitnir::core
 
     };
 
-    template<size_t...>
-    struct index_sequence {};
-
-    template<size_t N, size_t... S>
-    struct generate_index_sequence_t: generate_index_sequence_t<N-1, N-1, S...> {};
-
-    template<size_t... S>
-    struct generate_index_sequence_t<0, S...> {
-        using type = index_sequence<S...>;
-    };
-
-    template<typename... Args>
-    using generate_index_sequence = typename generate_index_sequence_t<sizeof...(Args)>::type;
-
     template<typename Reader, typename... Args>
     struct read_argument_helper
     {
-        using index_seq = generate_index_sequence<Args...>;
+
 
         Reader* reader;
         std::tuple<Args...> params;
@@ -161,7 +148,7 @@ namespace hrodvitnir::core
         }
 
         template<typename ReadSpec, size_t... S>
-        typename ReadSpec::value_type apply_helper(ReadSpec, index_sequence<S...>)
+        typename ReadSpec::value_type apply_helper(ReadSpec, std::integer_sequence<size_t, S...>)
         {
             return ReadSpec::template read<Reader>(*reader, std::get<S>(params)...);
         }
@@ -170,6 +157,7 @@ namespace hrodvitnir::core
         template<typename ReadSpec>
         typename ReadSpec::value_type apply()
         {
+            using index_seq = std::index_sequence_for<Args...>;
             return apply_helper(ReadSpec{}, index_seq{});
         }
     };
