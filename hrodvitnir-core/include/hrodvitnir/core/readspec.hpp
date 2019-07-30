@@ -61,6 +61,18 @@ namespace hrodvitnir::core
     };
 
     //--------------------------------------------------------------------------
+    template<typename T>
+    struct r_arg_bits {
+        using value_type = T;
+
+        template<typename Reader>
+        static value_type read(Reader& r, size_t bits)
+        {
+            return r.template read<value_type>(bits);
+        }
+    };
+
+    //--------------------------------------------------------------------------
     template<size_t bits> using r_uint = read_spec<uint_type_t, bits>;
     template<size_t bits> using r_bit = r_uint<bits>;
     template<size_t bits> using r_int = read_spec<int_type_t, bits>;
@@ -191,4 +203,37 @@ namespace hrodvitnir::core
         using value_type = T;
     };
 
+    //--------------------------------------------------------------------------
+    template<template<typename...> typename Container, typename ItemSpec>
+    struct r_items_arg {
+        using item_type = typename ItemSpec::value_type;
+        using value_type = Container<item_type>;
+
+        template<typename Reader>
+        static value_type read(Reader& r, size_t count)
+        {
+            value_type ret;
+            for (size_t iter = 0; iter < count; ++iter) {
+                ret.emplace_back(ItemSpec::read(r));
+            }
+            return ret;
+        }
+    };
+
+    //--------------------------------------------------------------------------
+    template<template<typename...> typename Container, typename ItemSpec, size_t Size>
+    struct r_items_fixed {
+        using item_type = typename ItemSpec::value_Type;
+        using value_type = Container<item_type>;
+
+        template<typename Reader>
+        static value_type read(Reader& r)
+        {
+            value_type ret;
+            for (size_t iter = 0; iter < Size; ++iter) {
+                ret.emplace_back(ItemSpec::read(r));
+            }
+            return ret;
+        }
+    };
 }

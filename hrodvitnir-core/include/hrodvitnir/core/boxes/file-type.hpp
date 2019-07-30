@@ -36,13 +36,12 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 namespace hrodvitnir::core::boxes
 {
-
     template<typename Base>
     struct file_type: public Base
     {
         MUCH_BLACKER_MAGICK(major_brand, r_fourcc);
         MUCH_BLACKER_MAGICK(minor_version, r_uint<32>);
-        MUCH_BLACKER_MAGICK(compatible_brands, r_manual<std::vector<fourcc>>);
+        MUCH_BLACKER_MAGICK(compatible_brands, r_items_arg<std::vector, r_fourcc>);
 
         template<typename Reader>
         void read(Reader& r)
@@ -51,13 +50,8 @@ namespace hrodvitnir::core::boxes
             major_brand << r;
             minor_version << r;
 
-            std::vector<fourcc> brands;
             size_t count = (Base::box_end() - r.position() / 8) / 4;
-            brands.reserve(count);
-            for (size_t iter = 0; iter < count; ++iter) {
-                brands.push_back(r_fourcc::read(r));
-            }
-            compatible_brands = brands;
+            compatible_brands << read_args(r, count);
         }
     };
 }

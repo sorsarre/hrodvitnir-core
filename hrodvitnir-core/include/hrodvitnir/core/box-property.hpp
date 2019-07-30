@@ -131,6 +131,55 @@ namespace hrodvitnir::core
 
     };
 
+    template<size_t...>
+    struct index_sequence {};
+
+    template<size_t N, size_t... S>
+    struct generate_index_sequence_t: generate_index_sequence_t<N-1, N-1, S...> {};
+
+    template<size_t... S>
+    struct generate_index_sequence_t<0, S...> {
+        using type = index_sequence<S...>;
+    };
+
+    template<typename... Args>
+    using generate_index_sequence = typename generate_index_sequence_t<sizeof...(Args)>::type;
+
+    template<typename Reader, typename... Args>
+    struct read_argument_helper
+    {
+        using index_seq = generate_index_sequence<Args...>;
+
+        Reader* reader;
+        std::tuple<Args...> params;
+
+        read_argument_helper(Reader& r, Args&&... args)
+            : reader(&r)
+            , params(std::forward<Args>(args)...)
+        {
+
+        }
+
+        template<typename ReadSpec, size_t... S>
+        typename ReadSpec::value_type apply_helper(ReadSpec, index_sequence<S...>)
+        {
+            return ReadSpec::template read<Reader>(*reader, std::get<S>(params)...);
+        }
+
+        // read the field from bitreader
+        template<typename ReadSpec>
+        typename ReadSpec::value_type apply()
+        {
+            return apply_helper(ReadSpec{}, index_seq{});
+        }
+    };
+
+    template<typename Reader, typename... Args>
+    read_argument_helper<Reader, Args...> read_args(Reader& r, Args&&... params)
+    {
+        return read_argument_helper<Reader, Args...>(r, std::forward<Args>(params)...);
+    }
+
     //------------------------------------------------------------------------------
     // now that's the real meat -- field binding
     // it does some ugly shit pointer magic inside to get to the fieldset
@@ -140,6 +189,7 @@ namespace hrodvitnir::core
     struct read_mapped_property: public named_property<Hash>
     {
         using value_type = typename ReadSpec::value_type;
+        using read_spec = ReadSpec;
 
         read_mapped_property(property_initializer&& init): named_property<Hash>(init.name)
         {
@@ -175,6 +225,12 @@ namespace hrodvitnir::core
         void operator<<(Reader& r)
         {
             *this = ReadSpec::template read<Reader>(r);
+        }
+
+        template<typename Reader, typename... Args>
+        void operator<<(read_argument_helper<Reader, Args...>&& helper)
+        {
+            *this = helper.template apply<ReadSpec>();
         }
 
         // sometimes operator value_type&() ain't enough to hint the compiler

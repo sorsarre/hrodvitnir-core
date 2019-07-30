@@ -40,10 +40,10 @@ namespace hrodvitnir::core::boxes
     template<typename Base>
     struct track_header: public Base
     {
-        MUCH_BLACKER_MAGICK(creation_time, r_manual<uint64_t>);
-        MUCH_BLACKER_MAGICK(modification_time, r_manual<uint64_t>);
+        MUCH_BLACKER_MAGICK(creation_time, r_arg_bits<uint64_t>);
+        MUCH_BLACKER_MAGICK(modification_time, r_arg_bits<uint64_t>);
         MUCH_BLACKER_MAGICK(track_ID, r_uint<32>);
-        MUCH_BLACKER_MAGICK(duration, r_manual<uint64_t>);
+        MUCH_BLACKER_MAGICK(duration, r_arg_bits<uint64_t>);
         MUCH_BLACKER_MAGICK(layer, r_uint<16>);
         MUCH_BLACKER_MAGICK(alternate_group, r_uint<16>);
         MUCH_BLACKER_MAGICK(volume, r_qmn<uint16_t, 8>);
@@ -56,11 +56,11 @@ namespace hrodvitnir::core::boxes
         {
             Base::read(r);
             size_t bitcount = (Base::version == 1) ? 64 : 32;
-            creation_time = r.template read<uint64_t>(bitcount);
-            modification_time = r.template read<uint64_t>(bitcount);
-            track_ID = r_uint<32>::read(r);
+            creation_time << read_args(r, bitcount);;
+            modification_time << read_args(r, bitcount);;
+            track_ID << r;
             r.skip(32); // reserved
-            duration = r.template read<uint64_t>(bitcount);
+            duration << read_args(r, bitcount);;
 
             r.skip(32*2); // reserved
 
