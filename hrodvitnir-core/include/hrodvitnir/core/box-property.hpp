@@ -135,30 +135,22 @@ namespace hrodvitnir::core
     template<typename Reader, typename... Args>
     struct read_argument_helper
     {
-
-
-        Reader* reader;
-        std::tuple<Args...> params;
+        std::tuple<Reader*, Args...> params;
 
         read_argument_helper(Reader& r, Args&&... args)
-            : reader(&r)
-            , params(std::forward<Args>(args)...)
+            : params(&r, std::forward<Args>(args)...)
         {
 
-        }
-
-        template<typename ReadSpec, size_t... S>
-        typename ReadSpec::value_type apply_helper(ReadSpec, std::integer_sequence<size_t, S...>)
-        {
-            return ReadSpec::template read<Reader>(*reader, std::get<S>(params)...);
         }
 
         // read the field from bitreader
         template<typename ReadSpec>
         typename ReadSpec::value_type apply()
         {
-            using index_seq = std::index_sequence_for<Args...>;
-            return apply_helper(ReadSpec{}, index_seq{});
+            auto applicator = []<typename R, typename... LArgs>(R* reader, LArgs&&... args) -> auto {
+                return ReadSpec::template read(*reader, std::forward<LArgs>(args)...);
+            };
+            return std::apply(applicator, params);
         }
     };
 
