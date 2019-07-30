@@ -46,7 +46,7 @@ target_include_directories(hrodvitnir-core INTERFACE
     $<INSTALL_INTERFACE:include>)
 target_link_libraries(hrodvitnir-core bitcommonscpp)
 set_target_properties(hrodvitnir-core PROPERTIES
-        CXX_STANDARD 17
+        CXX_STANDARD 20
         CXX_STANDARD_REQUIRED ON)
 
 

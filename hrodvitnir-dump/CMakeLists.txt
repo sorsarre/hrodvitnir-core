@@ -36,7 +36,7 @@ project(hrodvitnir-dump)
 set(HRODVITNIR_DUMP_SRC src/main.cpp src/any_printer.hpp)
 add_executable(hrodvitnir-dump ${HRODVITNIR_DUMP_SRC})
 set_target_properties(hrodvitnir-dump PROPERTIES
-    CXX_STANDARD 17
+    CXX_STANDARD 20
     CXX_STANDARD_REQUIRED ON
 )
 target_link_libraries(hrodvitnir-dump hrodvitnir-core bitcommonscpp)

@@ -19,7 +19,7 @@ target_link_libraries(bitcommons_gtest bitcommonscpp)
 target_link_libraries(bitcommons_gtest ${GTEST_BOTH_LIBRARIES})
 target_link_libraries(bitcommons_gtest pthread)
 set_target_properties(bitcommons_gtest PROPERTIES
-        CXX_STANDARD 17
+        CXX_STANDARD 20
         CXX_STANDARD_REQUIRED ON
         )
 
