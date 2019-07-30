@@ -55,23 +55,27 @@ namespace hrodvitnir::core
 
         uint8_t index = 0;
 
+        //--------------------------------------------------------------------------
         static mapping_t& mapping()
         {
             static mapping_t map;
             return map;
         }
 
+        //--------------------------------------------------------------------------
         static uint64_t register_name(uint64_t key, const char* name)
         {
             mapping()[key] = name;
             return key;
         }
 
+        //--------------------------------------------------------------------------
         static const std::string& get_name(uint64_t key)
         {
             return mapping()[key];
         }
 
+        //--------------------------------------------------------------------------
         fieldset* __get_target()
         {
             auto raw_ptr = reinterpret_cast<uint8_t*>(this);
@@ -80,6 +84,7 @@ namespace hrodvitnir::core
             return *result;
         }
 
+        //--------------------------------------------------------------------------
         const fieldset* __get_target() const
         {
             return const_cast<property_base*>(this)->__get_target();
@@ -105,12 +110,14 @@ namespace hrodvitnir::core
     {
         std::tuple<Reader*, Args...> params;
 
+        //--------------------------------------------------------------------------
         read_argument_helper(Reader& r, Args&&... args)
             : params(&r, std::forward<Args>(args)...)
         {
 
         }
 
+        //--------------------------------------------------------------------------
         // read the field from bitreader
         template<typename ReadSpec>
         typename ReadSpec::value_type apply()
@@ -122,6 +129,9 @@ namespace hrodvitnir::core
         }
     };
 
+    //------------------------------------------------------------------------------
+    // convenience wrapper to use in parser code
+    // field << read_args(reader, Base::version) for example
     template<typename Reader, typename... Args>
     read_argument_helper<Reader, Args...> read_args(Reader& r, Args&&... params)
     {
@@ -139,6 +149,7 @@ namespace hrodvitnir::core
         using value_type = typename ReadSpec::value_type;
         using read_spec = ReadSpec;
 
+        //--------------------------------------------------------------------------
         read_mapped_property(property_initializer&& init): named_property<Hash>(init.name)
         {
             auto raw_ptr = reinterpret_cast<uint8_t*>(this);
@@ -147,27 +158,32 @@ namespace hrodvitnir::core
             this->index = diff;
         }
 
+        //--------------------------------------------------------------------------
         read_mapped_property<ReadSpec, Hash>& operator=(const value_type& val)
         {
             this->__get_target()->set(Hash, val);
             return *this;
         }
 
+        //--------------------------------------------------------------------------
         const std::string& get_name() const
         {
             return property_base::get_name(Hash);
         }
 
+        //--------------------------------------------------------------------------
         operator const value_type&() const
         {
             return std::any_cast<const value_type&>(this->__get_target()->get(Hash));
         }
 
+        //--------------------------------------------------------------------------
         operator value_type&()
         {
             return std::any_cast<value_type&>(this->__get_target()->get(Hash));
         }
 
+        //--------------------------------------------------------------------------
         // read the field from bitreader
         template<typename Reader>
         void operator<<(Reader& r)
@@ -175,18 +191,21 @@ namespace hrodvitnir::core
             *this = ReadSpec::template read<Reader>(r);
         }
 
+        //--------------------------------------------------------------------------
         template<typename Reader, typename... Args>
         void operator<<(read_argument_helper<Reader, Args...>&& helper)
         {
             *this = helper.template apply<ReadSpec>();
         }
 
+        //--------------------------------------------------------------------------
         // sometimes operator value_type&() ain't enough to hint the compiler
         value_type& operator()()
         {
             return *this;
         }
 
+        //--------------------------------------------------------------------------
         const value_type& operator()() const
         {
             return *this;
