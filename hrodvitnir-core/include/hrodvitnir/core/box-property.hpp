@@ -45,6 +45,7 @@ namespace hrodvitnir::core
     {
         fieldset** host;
         const char* name;
+        uint64_t key;
     };
 
     //------------------------------------------------------------------------------
@@ -213,4 +214,4 @@ namespace hrodvitnir::core
     };
 }
 
-#define MUCH_BLACKER_MAGICK(Prop, ...) read_mapped_property<__VA_ARGS__, #Prop ## _crc64> Prop = property_initializer{&this->__box, #Prop}
+#define MUCH_BLACKER_MAGICK(Prop, ...) read_mapped_property<__VA_ARGS__, #Prop ## _crc64> Prop = property_initializer{&this->__box, #Prop, Base::ThisClass::register_property(#Prop ## _crc64)}

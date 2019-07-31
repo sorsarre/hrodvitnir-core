@@ -33,6 +33,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #pragma once
 #include <cstddef>
 #include <hrodvitnir/core/fieldset.hpp>
+#include <hrodvitnir/core/field-ordering.hpp>
 #include <hrodvitnir/core/uuid.hpp>
 
 namespace hrodvitnir::core
@@ -44,20 +45,59 @@ namespace hrodvitnir::core
     //------------------------------------------------------------------------------
     struct binding_base
     {
+        using ThisClass = binding_base;
+
+        static uint64_t register_property(uint64_t key)
+        {
+            return key;
+        }
+
+        static std::shared_ptr<field_ordering_map> get_ordering()
+        {
+            return nullptr;
+        }
+
         fieldset* __box;
     };
 
     //------------------------------------------------------------------------------
-    struct binding_end
+    template <typename T>
+    struct ordered_binding_base
+    {
+        using ThisClass = ordered_binding_base<T>;
+
+        static uint64_t register_property(uint64_t key)
+        {
+            static bool finished = false;
+            if (key == 0) {
+                finished = true;
+            } else {
+                if (!finished) {
+                    auto registry = field_ordering_map::get_instance<T>();
+                    registry->register_field(key);
+                }
+            }
+            return key;
+        }
+        static std::shared_ptr<field_ordering_map> get_ordering()
+        {
+            return field_ordering_map::get_instance<T>();
+        }
+
+        fieldset* __box;
+    };
+
+    //------------------------------------------------------------------------------
+    /*struct binding_end
     {
         struct{} __dummy;
-    };
+    };*/
 
     //------------------------------------------------------------------------------
     // tells how many fields there are in the binding type
     // gotta blaze them straight in the face if ther are more than 256
     // as indexing would wrap over and fail then
-    template<typename A, typename F>
+    /*template<typename A, typename F>
     constexpr ptrdiff_t span()
     {
         A a;
@@ -69,15 +109,18 @@ namespace hrodvitnir::core
         auto align_field = alignof(F);
         auto align = (align_beacon < align_field) ? align_field : align_beacon;
         return (ptr_b - ptr_c - align) / sizeof(F);
-    }
+    }*/
+    // NODELETE: could be useful for testing and failing gracefully upon index blowing up beyond 255
 
     //------------------------------------------------------------------------------
     // small helper which gets latched onto the inheritance sequence last
     template<typename Acc>
-    struct finish_helper_t: Acc, binding_end {
+    struct finish_helper_t: Acc {
         finish_helper_t(fieldset& fs)
         {
+            fs._ordering = Acc::ThisClass::get_ordering();
             this->__box = &fs;
+            Acc::ThisClass::register_property(0);
         }
 
         finish_helper_t()
@@ -108,7 +151,8 @@ namespace hrodvitnir::core
     template< template<typename Base> class... Parts>
     struct box_binding
     {
-        using type = typename box_binding_helper<binding_base, Parts...>::type;
+        using intermediate_type = typename box_binding_helper<binding_base, Parts...>::type;
+        using type = typename box_binding_helper<ordered_binding_base<intermediate_type>, Parts...>::type;
     };
 
     //------------------------------------------------------------------------------

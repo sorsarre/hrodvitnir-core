@@ -31,33 +31,40 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #pragma once
-#include <unordered_map>
-#include <cstdint>
-#include <any>
-#include <hrodvitnir/core/ce_crc64.hpp>
-#include <hrodvitnir/core/field-ordering.hpp>
+#include <memory>
+#include <map>
 
 namespace hrodvitnir::core
 {
-    //------------------------------------------------------------------------------
-    // FIELDSET
-    //------------------------------------------------------------------------------
-    struct fieldset
+    class field_ordering_map
     {
-        //----------------------------------------------------------------------
-        const std::any& get(uint64_t key) const;
-        std::any& get(uint64_t key);
-        const std::any& get(const char* str) const;
-        std::any& get(const char* str);
-        const std::any& get(const std::string& str) const;
-        std::any& get(const std::string& str);
-        void set(uint64_t key, std::any&& val);
-        void set(const char* str, std::any&& val);
-        void set(const std::string& str, std::any&& val);
-        bool has(uint64_t key) const { return _fields.count(key) > 0; }
+    public:
+        template<typename BoxBinding>
+        static std::shared_ptr<field_ordering_map> get_instance()
+        {
+            static std::shared_ptr<field_ordering_map> instance;
+            if (!instance) {
+                instance = std::make_shared<field_ordering_map>();
+            }
+            return instance;
+        }
 
-        //----------------------------------------------------------------------
-        std::unordered_map<uint64_t, std::any> _fields;
-        std::shared_ptr<field_ordering_map> _ordering;
+        using internal_type = std::map<size_t, uint64_t>;
+        using const_iterator = internal_type::const_iterator;
+
+        const_iterator begin() const { return _field_order.cbegin(); }
+        const_iterator cbegin() const { return _field_order.cbegin(); }
+        const_iterator end() const { return _field_order.cend(); }
+        const_iterator cend() const { return _field_order.cend(); }
+
+        void register_field(uint64_t key)
+        {
+            _field_order[_index] = key;
+            ++_index;
+        }
+
+    private:
+        std::map<uint64_t, size_t> _field_order;
+        size_t _index = 0;
     };
 }

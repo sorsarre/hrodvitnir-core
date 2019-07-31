@@ -177,14 +177,31 @@ namespace hrodvitnir::dump
 
             register_printer<core::fieldset>([](auto& o, const core::fieldset& fs) {
                 o << dump_begin;
-                for (const auto& f: fs._fields) {
-                    auto name = core::property_base::get_name(f.first);
-                    if (name == "__pos" || name == "__size") {
-                        continue;
+                if (fs._ordering) {
+                    for (const auto& ord: *fs._ordering) {
+                        auto iter = fs._fields.find(ord.second);
+                        if (iter == fs._fields.end()) {
+                            continue;
+                        }
+                        const auto& f = *iter;
+                        auto name = core::property_base::get_name(f.first);
+                        if (name == "__pos" || name == "__size") {
+                            continue;
+                        }
+                        o << dump_offset << "- [" << ord.first << "] " << core::property_base::get_name(f.first) << " ";
+                        any_print(o, f.second);
+                        o << '\n';
                     }
-                    o << dump_offset << "- " << core::property_base::get_name(f.first) << " ";
-                    any_print(o, f.second);
-                    o << '\n';
+                } else {
+                    for (const auto& f: fs._fields) {
+                        auto name = core::property_base::get_name(f.first);
+                        if (name == "__pos" || name == "__size") {
+                            continue;
+                        }
+                        o << dump_offset << "- " << core::property_base::get_name(f.first) << " ";
+                        any_print(o, f.second);
+                        o << '\n';
+                    }
                 }
                 o << dump_end;
             });
