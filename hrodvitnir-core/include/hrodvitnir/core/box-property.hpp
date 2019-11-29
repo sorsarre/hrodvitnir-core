@@ -160,9 +160,9 @@ namespace hrodvitnir::core
         }
 
         //--------------------------------------------------------------------------
-        read_mapped_property<ReadSpec, Hash>& operator=(const value_type& val)
+        read_mapped_property<ReadSpec, Hash>& operator=(value_type val)
         {
-            this->__get_target()->set(Hash, val);
+            this->__get_target()->set(Hash, std::move(val));
             return *this;
         }
 
