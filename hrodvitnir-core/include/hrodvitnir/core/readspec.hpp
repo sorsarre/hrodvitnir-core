@@ -33,6 +33,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #pragma once
 #include <vector>
 #include <bitcommons/codings/string-nullterm.hpp>
+#include <hrodvitnir/core/table.hpp>
 #include <hrodvitnir/core/uuid.hpp>
 #include <hrodvitnir/core/fourcc.hpp>
 #include <hrodvitnir/core/meta-helpers.hpp>
@@ -249,6 +250,39 @@ namespace hrodvitnir::core
             value_type ret;
             for (size_t iter = 0; iter < Size; ++iter) {
                 ret.emplace_back(ItemSpec::read(r));
+            }
+            return ret;
+        }
+    };
+
+    //--------------------------------------------------------------------------
+    template<typename EntrySpec, typename SizeSpec>
+    struct r_fixed_table {
+        using entry_type = typename EntrySpec::value_type;
+        using value_type = std::shared_ptr<table<entry_type>>;
+
+        template<typename Reader>
+        static value_type read(Reader& r)
+        {
+            auto size = SizeSpec::read(r);
+            auto entry = std::move(EntrySpec::read(r));
+            return std::make_shared<fixed_table<entry_type>>(std::move(entry), size);
+        }
+    };
+
+    //--------------------------------------------------------------------------
+    template<typename EntrySpec, typename SizeSpec>
+    struct r_array_table {
+        using entry_type = typename EntrySpec::value_type;
+        using value_type = std::shared_ptr<table<entry_type>>;
+
+        template<typename Reader>
+        static value_type read(Reader& r)
+        {
+            auto ret = std::make_shared<array_table<entry_type>>();
+            auto size = SizeSpec::read(r);
+            for (size_t iter = 0; iter < size; ++iter) {
+                ret->entries().emplace_back(std::move(EntrySpec::read(r)));
             }
             return ret;
         }
