@@ -102,6 +102,12 @@ namespace hrodvitnir::dump
 
     void any_print(dump_context& o, const std::any& v);
 
+    template<typename T>
+    using ptr = std::shared_ptr<T>;
+
+    template<typename T>
+    using table_ptr_t = ptr<core::table<T>>;
+
     struct any_printer {
         using printer_type = std::function<void(dump_context&, const std::any&)>;
 
@@ -166,6 +172,28 @@ namespace hrodvitnir::dump
                     << ", media_rate_fraction=" << edit.media_rate_fraction
                     << "}";
             });
+
+            using stts_entry = core::boxes::time_to_sample_entry;
+
+            auto table_printer = [](auto& o, const auto& table) {
+                o << "[table] size = " << table->size() << "\n"
+                    << dump_begin;
+                for (size_t iter = 0; iter < table->size(); ++iter) {
+                    const auto& entry = table->at(iter);
+                    o << dump_offset << "- [" << iter << "]: ";
+                    any_print(o, entry);
+                    o << '\n';
+                }
+                o << dump_end;
+            };
+
+            register_printer<stts_entry>([](auto& o, const stts_entry& entry) {
+                o << "{count=" << entry.sample_count
+                    << ", delta=" << entry.sample_delta
+                    << "}";
+            });
+
+            register_printer<table_ptr_t<stts_entry>>(table_printer);
 
             register_printer<core::fourcc>([](auto& o, const core::fourcc& fcc) {
                 o << fcc.string();
