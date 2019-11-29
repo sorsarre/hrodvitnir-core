@@ -253,4 +253,17 @@ namespace hrodvitnir::core
             return ret;
         }
     };
+
+    //--------------------------------------------------------------------------
+    template<typename Value, typename Lambda>
+    struct r_lambda {
+        using value_type = Value;
+
+        template<typename Reader>
+        static value_type read(Reader& r)
+        {
+            return Lambda{}(r);
+        }
+    };
+
 }
