@@ -85,6 +85,7 @@ int main(int argc, char** argv) {
     mapping->assign<core::boxes::visual_sample_entry_box_t>({
         "mp4v", "avc1"
     });
+    mapping->assign<core::boxes::stts_box_t>({"stts"});
 
     mapping->assign<core::boxes::pasp_box_t>({"pasp"});
     mapping->assign<core::boxes::clap_box_t>({"clap"});
