@@ -57,5 +57,14 @@ install(TARGETS hrodvitnir-core
         ARCHIVE DESTINATION lib
         )
 
+enable_testing()
+find_package(GTest)
+
+if (NOT GTEST_FOUND)
+        message(WARNING "Unit tests are disabled - gtest not found")
+else()
+        add_subdirectory(test)
+endif()
+
 install(DIRECTORY include/hrodvitnir DESTINATION include)
 install(EXPORT hrodvitnir-core DESTINATION cmake NAMESPACE Hrodvitnir::)

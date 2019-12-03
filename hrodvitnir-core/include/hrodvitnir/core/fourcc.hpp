@@ -46,6 +46,12 @@ namespace hrodvitnir::core
         constexpr fourcc(const char* str, size_t sz = 4): _data(from_string(str, sz)) {}
 
         //----------------------------------------------------------------------
+        constexpr bool operator!=(const fourcc& other) const
+        {
+            return other._data != _data;
+        }
+
+        //----------------------------------------------------------------------
         constexpr bool operator==(const fourcc& other) const
         {
             return other._data == _data;
@@ -55,6 +61,12 @@ namespace hrodvitnir::core
         constexpr bool operator<(const fourcc& other) const
         {
             return _data < other._data;
+        }
+
+        //----------------------------------------------------------------------
+        constexpr bool operator>(const fourcc& other) const
+        {
+            return _data > other._data;
         }
 
         //----------------------------------------------------------------------
