@@ -48,7 +48,7 @@ namespace hrodvitnir::core::boxes
     template<typename Base>
     struct sample_dependency_type: public Base
     {
-        using r_sdtp_entry = r_lambda<sample_dependency_type_entry, decltype([](auto& r) -> auto {
+        using r_sdtp_entry = r_lambda<[](auto& r) -> auto {
             using r_uint2 = r_uint<2>;
             sample_dependency_type_entry ret;
             ret.is_leading = r_uint2::read(r);
@@ -56,7 +56,7 @@ namespace hrodvitnir::core::boxes
             ret.sample_is_depended_on = r_uint2::read(r);
             ret.sample_has_redundancy = r_uint2::read(r);
             return ret;
-        })>;
+        }>;
 
         using r_sdtp_table = r_filler_table<r_sdtp_entry>;
 

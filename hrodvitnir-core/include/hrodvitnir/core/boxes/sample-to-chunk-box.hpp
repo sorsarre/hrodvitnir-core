@@ -47,14 +47,14 @@ namespace hrodvitnir::core::boxes
     template<typename Base>
     struct sample_to_chunk: public Base
     {
-        using r_stsc_entry = r_lambda<sample_to_chunk_entry, decltype([](auto& r) -> auto {
+        using r_stsc_entry = r_lambda<[](auto& r) -> auto {
             sample_to_chunk_entry ret;
             using r_uint32 = r_uint<32>;
             ret.first_chunk = r_uint32::read(r);
             ret.samples_per_chunk = r_uint32::read(r);
             ret.sample_description_index = r_uint32::read(r);
             return ret;
-        })>;
+        }>;
 
         MUCH_BLACKER_MAGICK(_contents, r_array_table<r_stsc_entry, r_uint<32>>);
 

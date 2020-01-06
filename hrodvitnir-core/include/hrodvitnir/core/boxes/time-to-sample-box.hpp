@@ -46,12 +46,12 @@ namespace hrodvitnir::core::boxes
     template<typename Base>
     struct time_to_sample: public Base
     {
-        using r_stts_entry = r_lambda<time_to_sample_entry, decltype([](auto& r) -> auto {
+        using r_stts_entry = r_lambda<[](auto& r) -> auto {
             time_to_sample_entry ret;
             ret.sample_count = r_uint<32>::read(r);
             ret.sample_delta = r_uint<32>::read(r);
             return ret;
-        })>;
+        }>;
 
         MUCH_BLACKER_MAGICK(_contents, r_array_table<r_stts_entry, r_uint<32>>);
 

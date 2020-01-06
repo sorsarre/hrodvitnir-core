@@ -46,12 +46,12 @@ namespace hrodvitnir::core::boxes
     template<typename Base>
     struct composition_offset: public Base
     {
-        using r_ctts_entry = r_lambda<composition_offset_entry, decltype([](auto& r) -> auto {
+        using r_ctts_entry = r_lambda<[](auto& r) -> auto {
             composition_offset_entry ret;
             ret.sample_count = r_uint<32>::read(r);
             ret.sample_offset = r_int<32>::read(r);
             return ret;
-        })>;
+        }>;
 
         MUCH_BLACKER_MAGICK(_contents, r_array_table<r_ctts_entry, r_uint<32>>);
 

@@ -32,6 +32,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #pragma once
 #include <vector>
+#include <bitcommons/bitreader.hpp>
+#include <bitcommons/abstract_byte_source.hpp>
 #include <bitcommons/codings/string-nullterm.hpp>
 #include <hrodvitnir/core/table.hpp>
 #include <hrodvitnir/core/uuid.hpp>
@@ -41,6 +43,14 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 namespace hrodvitnir::core
 {
+    //--------------------------------------------------------------------------
+    using dummy_reader_type = bitcommons::bitreader<bitcommons::abstract_byte_source>;
+
+    //--------------------------------------------------------------------------
+    constexpr dummy_reader_type& dummy_reader() {
+        return *(dummy_reader_type*)(nullptr);
+    }
+
     //--------------------------------------------------------------------------
     template<size_t Bits>
     using uint_type_t = typename meta::pick_type<Bits, uint8_t, uint16_t, uint32_t, uint64_t>::type;
@@ -309,14 +319,14 @@ namespace hrodvitnir::core
     };
 
     //--------------------------------------------------------------------------
-    template<typename Value, typename Lambda>
+    template<auto Lambda>
     struct r_lambda {
-        using value_type = Value;
+        using value_type = decltype(Lambda(dummy_reader()));
 
         template<typename Reader>
-        static value_type read(Reader& r)
+        static auto read(Reader& r)
         {
-            return Lambda{}(r);
+            return Lambda(r);
         }
     };
 
