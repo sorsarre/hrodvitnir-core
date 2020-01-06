@@ -40,6 +40,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <hrodvitnir/core/fourcc.hpp>
 #include <hrodvitnir/core/uuid.hpp>
 #include <hrodvitnir/core/tree/tree.hpp>
+#include <hrodvitnir/core/boxes/time-to-sample-box.hpp>
+#include <hrodvitnir/core/boxes/composition-offset-box.hpp>
 #include <hrodvitnir/core/boxes/sample-to-chunk-box.hpp>
 #include <hrodvitnir/core/boxes/edit-list-box.hpp>
 
@@ -175,6 +177,7 @@ namespace hrodvitnir::dump
             });
 
             using stts_entry = core::boxes::time_to_sample_entry;
+            using ctts_entry = core::boxes::composition_offset_entry;
             using stsc_entry = core::boxes::sample_to_chunk_entry;
 
             auto table_printer = [](auto& o, const auto& table) {
@@ -195,6 +198,11 @@ namespace hrodvitnir::dump
                     << "}";
             });
 
+            register_printer<ctts_entry>([](auto& o, const ctts_entry& entry) {
+                o << "{count=" << entry.sample_count
+                    << ", offset=" << entry.sample_offset
+                    << "}";
+            });
 
             register_printer<stsc_entry>([](auto& o, const stsc_entry& entry) {
                 o << "{first_chunk=" << entry.first_chunk
@@ -204,6 +212,7 @@ namespace hrodvitnir::dump
             });
 
             register_printer<table_ptr_t<stts_entry>>(table_printer);
+            register_printer<table_ptr_t<ctts_entry>>(table_printer);
             register_printer<table_ptr_t<stsc_entry>>(table_printer);
             register_printer<table_ptr_t<uint32_t>>(table_printer);
             register_printer<table_ptr_t<uint32_t>>(table_printer);

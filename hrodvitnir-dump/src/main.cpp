@@ -86,6 +86,7 @@ int main(int argc, char** argv) {
         "mp4v", "avc1"
     });
     mapping->assign<core::boxes::stts_box_t>({"stts"});
+    mapping->assign<core::boxes::ctts_box_t>({"ctts"});
     mapping->assign<core::boxes::stss_box_t>({"stss"});
     mapping->assign<core::boxes::stco_box_t>({"stco"});
     mapping->assign<core::boxes::stsc_box_t>({"stsc"});
