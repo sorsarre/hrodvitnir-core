@@ -215,7 +215,6 @@ namespace hrodvitnir::dump
             register_printer<table_ptr_t<ctts_entry>>(table_printer);
             register_printer<table_ptr_t<stsc_entry>>(table_printer);
             register_printer<table_ptr_t<uint32_t>>(table_printer);
-            register_printer<table_ptr_t<uint32_t>>(table_printer);
 
             register_printer<core::fourcc>([](auto& o, const core::fourcc& fcc) {
                 o << fcc.string();

@@ -49,6 +49,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <hrodvitnir/core/boxes/sync-sample-box.hpp>
 #include <hrodvitnir/core/boxes/chunk-offset-box.hpp>
 #include <hrodvitnir/core/boxes/sample-to-chunk-box.hpp>
+#include <hrodvitnir/core/boxes/sample-size-box.hpp>
 #include <hrodvitnir/core/boxes/visual-sample-entry-box.hpp>
 
 #include <hrodvitnir/core/boxes/pixel-aspect-ratio-box.hpp>
@@ -81,6 +82,7 @@ namespace hrodvitnir::core::boxes
     using stss_box_t = data_box_binding_t<full_box, sync_sample>;
     using stco_box_t = data_box_binding_t<full_box, chunk_offset>;
     using stsc_box_t = data_box_binding_t<full_box, sample_to_chunk>;
+    using stsz_box_t = data_box_binding_t<full_box, sample_size>;
 
     using sample_entry_box_t = data_box_binding_t<sample_entry>;
     using visual_sample_entry_box_t = cont_box_binding_t<sample_entry, visual_sample_entry>;
