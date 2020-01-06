@@ -91,6 +91,7 @@ int main(int argc, char** argv) {
     mapping->assign<core::boxes::stco_box_t>({"stco"});
     mapping->assign<core::boxes::stsc_box_t>({"stsc"});
     mapping->assign<core::boxes::stsz_box_t>({"stsz"});
+    mapping->assign<core::boxes::sdtp_box_t>({"sdtp"});
 
     mapping->assign<core::boxes::pasp_box_t>({"pasp"});
     mapping->assign<core::boxes::clap_box_t>({"clap"});

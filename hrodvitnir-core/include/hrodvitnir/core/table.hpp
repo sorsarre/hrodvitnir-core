@@ -109,8 +109,8 @@ namespace hrodvitnir::core
 
         //----------------------------------------------------------------------
         fixed_table(entry_type entry, size_t size)
-            : _entry(std::move(entry))
-            , _size(size)
+            : _size(size)
+            , _entry(std::move(entry))
         {
 
         }

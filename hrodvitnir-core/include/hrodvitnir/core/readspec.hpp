@@ -222,6 +222,26 @@ namespace hrodvitnir::core
     };
 
     //--------------------------------------------------------------------------
+    template<typename EntrySpec>
+    struct r_filler_table {
+        using entry_type = typename EntrySpec::value_type;
+        using value_type = std::shared_ptr<table<entry_type>>;
+
+        template<typename Reader>
+        static value_type read(Reader& r, size_t count)
+        {
+            auto ret = std::make_shared<array_table<entry_type>>();
+            auto& entries = ret->entries();
+
+            for (size_t iter = 0; iter < count; ++iter) {
+                entries.emplace_back(EntrySpec::read(r));
+            }
+
+            return ret;
+        }
+    };
+
+    //--------------------------------------------------------------------------
     template<template<typename...> typename Container, typename ItemSpec>
     struct r_arg_items_arg {
         using item_type = typename ItemSpec::value_type;

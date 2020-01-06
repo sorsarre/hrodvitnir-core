@@ -43,6 +43,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <hrodvitnir/core/boxes/time-to-sample-box.hpp>
 #include <hrodvitnir/core/boxes/composition-offset-box.hpp>
 #include <hrodvitnir/core/boxes/sample-to-chunk-box.hpp>
+#include <hrodvitnir/core/boxes/sample-dependency-type-box.hpp>
 #include <hrodvitnir/core/boxes/edit-list-box.hpp>
 
 namespace hrodvitnir::dump
@@ -65,6 +66,11 @@ namespace hrodvitnir::dump
         void print(const T& value)
         {
             *out << value;
+        }
+
+        dump_context& operator<<(dump_context&)
+        {
+            return *this;
         }
 
         template<typename T>
@@ -103,7 +109,7 @@ namespace hrodvitnir::dump
         }
     }
 
-    void any_print(dump_context& o, const std::any& v);
+    dump_context& any_print(dump_context& o, const std::any& v);
 
     template<typename T>
     using ptr = std::shared_ptr<T>;
@@ -179,6 +185,7 @@ namespace hrodvitnir::dump
             using stts_entry = core::boxes::time_to_sample_entry;
             using ctts_entry = core::boxes::composition_offset_entry;
             using stsc_entry = core::boxes::sample_to_chunk_entry;
+            using sdtp_entry = core::boxes::sample_dependency_type_entry;
 
             auto table_printer = [](auto& o, const auto& table) {
                 o << "[table] size = " << table->size() << "\n"
@@ -211,9 +218,18 @@ namespace hrodvitnir::dump
                     << "}";
             });
 
+            register_printer<sdtp_entry>([](auto& o, const sdtp_entry& entry) {
+                o << "{is_leading=" << any_print(o, entry.is_leading)
+                    << ", sample_depends_on=" << any_print(o, entry.sample_depends_on)
+                    << ", sample_is_depended_on=" << any_print(o, entry.sample_is_depended_on)
+                    << ", sample_has_redundancy=" << any_print(o, entry.sample_has_redundancy)
+                    << "}";
+            });
+
             register_printer<table_ptr_t<stts_entry>>(table_printer);
             register_printer<table_ptr_t<ctts_entry>>(table_printer);
             register_printer<table_ptr_t<stsc_entry>>(table_printer);
+            register_printer<table_ptr_t<sdtp_entry>>(table_printer);
             register_printer<table_ptr_t<uint32_t>>(table_printer);
 
             register_printer<core::fourcc>([](auto& o, const core::fourcc& fcc) {
@@ -257,10 +273,11 @@ namespace hrodvitnir::dump
         }
     };
 
-    void any_print(dump_context& o, const std::any& v)
+    dump_context& any_print(dump_context& o, const std::any& v)
     {
         static any_printer printer;
         printer.print(o, v);
+        return o;
     }
 
     void print_node(dump_context& o, const core::tree_node::ptr& node)
