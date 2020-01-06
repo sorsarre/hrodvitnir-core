@@ -45,6 +45,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <hrodvitnir/core/boxes/sample-description-box.hpp>
 #include <hrodvitnir/core/boxes/sample-entry-box.hpp>
 #include <hrodvitnir/core/boxes/time-to-sample-box.hpp>
+#include <hrodvitnir/core/boxes/sample-to-chunk-box.hpp>
 #include <hrodvitnir/core/boxes/visual-sample-entry-box.hpp>
 
 #include <hrodvitnir/core/boxes/pixel-aspect-ratio-box.hpp>
@@ -73,6 +74,7 @@ namespace hrodvitnir::core::boxes
     using smhd_box_t = data_box_binding_t<full_box, sound_media_header>;
     using stsd_box_t = cont_box_binding_t<full_box, sample_description>;
     using stts_box_t = data_box_binding_t<full_box, time_to_sample>;
+    using stsc_box_t = data_box_binding_t<full_box, sample_to_chunk>;
 
     using sample_entry_box_t = data_box_binding_t<sample_entry>;
     using visual_sample_entry_box_t = cont_box_binding_t<sample_entry, visual_sample_entry>;

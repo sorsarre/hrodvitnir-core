@@ -40,6 +40,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <hrodvitnir/core/fourcc.hpp>
 #include <hrodvitnir/core/uuid.hpp>
 #include <hrodvitnir/core/tree/tree.hpp>
+#include <hrodvitnir/core/boxes/sample-to-chunk-box.hpp>
 #include <hrodvitnir/core/boxes/edit-list-box.hpp>
 
 namespace hrodvitnir::dump
@@ -174,6 +175,7 @@ namespace hrodvitnir::dump
             });
 
             using stts_entry = core::boxes::time_to_sample_entry;
+            using stsc_entry = core::boxes::sample_to_chunk_entry;
 
             auto table_printer = [](auto& o, const auto& table) {
                 o << "[table] size = " << table->size() << "\n"
@@ -193,7 +195,16 @@ namespace hrodvitnir::dump
                     << "}";
             });
 
+
+            register_printer<stsc_entry>([](auto& o, const stsc_entry& entry) {
+                o << "{first_chunk=" << entry.first_chunk
+                    << ", samples_per_chunk=" << entry.samples_per_chunk
+                    << ", sample_description_index=" << entry.sample_description_index
+                    << "}";
+            });
+
             register_printer<table_ptr_t<stts_entry>>(table_printer);
+            register_printer<table_ptr_t<stsc_entry>>(table_printer);
 
             register_printer<core::fourcc>([](auto& o, const core::fourcc& fcc) {
                 o << fcc.string();
