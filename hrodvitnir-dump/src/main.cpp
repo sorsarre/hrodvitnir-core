@@ -85,6 +85,8 @@ int main(int argc, char** argv) {
     mapping->assign<core::boxes::visual_sample_entry_box_t>({
         "mp4v", "avc1"
     });
+    mapping->assign<core::boxes::avcC_box_t>({"avcC"});
+
     mapping->assign<core::boxes::stts_box_t>({"stts"});
     mapping->assign<core::boxes::ctts_box_t>({"ctts"});
     mapping->assign<core::boxes::stss_box_t>({"stss"});

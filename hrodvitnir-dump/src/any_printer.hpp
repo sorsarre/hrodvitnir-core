@@ -172,6 +172,8 @@ namespace hrodvitnir::dump
             register_printer<std::vector<double>>(list_printer);
             register_printer<std::vector<uint16_t>>(list_printer);
             register_printer<std::vector<char>>(list_printer);
+            register_printer<std::vector<uint8_t>>(list_printer);
+            register_printer<std::vector<std::vector<uint8_t>>>(list_printer);
             register_printer<std::vector<core::boxes::edit_list_item>>(list_printer);
 
             register_printer<core::boxes::edit_list_item>([](auto& o, const core::boxes::edit_list_item& edit) {

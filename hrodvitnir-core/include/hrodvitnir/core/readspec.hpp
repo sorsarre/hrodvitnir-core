@@ -269,6 +269,24 @@ namespace hrodvitnir::core
     };
 
     //--------------------------------------------------------------------------
+    template<template<typename...> typename Container, typename ItemSpec, typename SizeSpec>
+    struct r_items_sized {
+        using item_type = typename ItemSpec::value_type;
+        using value_type = Container<item_type>;
+        
+        template<typename Reader>
+        static value_type read(Reader& r)
+        {
+            value_type ret;
+            auto size = SizeSpec::read(r);
+            for (size_t iter = 0; iter < size; ++iter) {
+                ret.emplace_back(ItemSpec::read(r));
+            }
+            return ret;
+        }
+    };
+
+    //--------------------------------------------------------------------------
     template<template<typename...> typename Container, typename ItemSpec, size_t Size>
     struct r_items_fixed {
         using item_type = typename ItemSpec::value_Type;

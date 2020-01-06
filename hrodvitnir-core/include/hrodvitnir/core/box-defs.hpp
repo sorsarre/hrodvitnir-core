@@ -52,6 +52,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <hrodvitnir/core/boxes/sample-size-box.hpp>
 #include <hrodvitnir/core/boxes/sample-dependency-type-box.hpp>
 #include <hrodvitnir/core/boxes/visual-sample-entry-box.hpp>
+#include <hrodvitnir/core/boxes/avc-decoder-configuration-box.hpp>
 
 #include <hrodvitnir/core/boxes/pixel-aspect-ratio-box.hpp>
 #include <hrodvitnir/core/boxes/clean-aperture-box.hpp>
@@ -89,6 +90,7 @@ namespace hrodvitnir::core::boxes
 
     using sample_entry_box_t = data_box_binding_t<sample_entry>;
     using visual_sample_entry_box_t = cont_box_binding_t<sample_entry, visual_sample_entry>;
+    using avcC_box_t = data_box_binding_t<avc_decoder_configuration>;
 
     using pasp_box_t = data_box_binding_t<pixel_aspect_ratio>;
     using clap_box_t = data_box_binding_t<clean_aperture>;
