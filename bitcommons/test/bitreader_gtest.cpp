@@ -155,6 +155,18 @@ TEST(bitreaderTest, read_signed_nonaligned)
 }
 
 //------------------------------------------------------------------------------
+TEST(bitreaderTest, read_small_parts)
+{
+    const uint8_t data[] = {0b00011011};
+    auto source = std::make_shared<source_t>(data, sizeof(data));
+    bitreader<source_t> br(source);
+    EXPECT_EQ(0, br.read<uint8_t>(2));
+    EXPECT_EQ(1, br.read<uint8_t>(2));
+    EXPECT_EQ(2, br.read<uint8_t>(2));
+    EXPECT_EQ(3, br.read<uint8_t>(2));
+}
+
+//------------------------------------------------------------------------------
 TEST(bitreaderTest, skip_non_cross_aligned)
 {
     const uint8_t data[] = {0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0x99};
