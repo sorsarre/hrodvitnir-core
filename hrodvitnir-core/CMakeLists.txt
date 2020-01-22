@@ -22,6 +22,7 @@ set(HRODVITNIR_CORE_HEADERS
         include/hrodvitnir/core/parser/box-parser.hpp
         include/hrodvitnir/core/parser/reader-mapping.hpp
         include/hrodvitnir/core/parser/simple-reader-mapping.hpp
+        include/hrodvitnir/core/parser/default-mapping.hpp
         include/hrodvitnir/core/tree/tree.hpp
         include/hrodvitnir/core/tree/tree-builder.hpp
         include/hrodvitnir/core/tree/tree-node.hpp
@@ -36,6 +37,7 @@ set(HRODVITNIR_CORE_SOURCES
         src/uuid.cpp
         src/box-parser.cpp
         src/simple-reader-mapping.cpp
+        src/default-mapping.cpp
         )
 
 add_library(hrodvitnir-core STATIC ${HRODVITNIR_CORE_SOURCES} ${HRODVITNIR_CORE_HEADERS})

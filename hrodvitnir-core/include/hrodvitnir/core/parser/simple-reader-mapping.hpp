@@ -45,11 +45,12 @@ namespace hrodvitnir::core
         const partial_reader_type& get(const uuid& u) const override;
 
         template<typename BoxBinding>
-        void assign(const std::initializer_list<fourcc>& fcc)
+        simple_reader_mapping& assign(const std::initializer_list<fourcc>& fcc)
         {
             for (const auto& f: fcc) {
                 _registry.emplace(uuid::from_fourcc(f), &partial_read<BoxBinding>);
             }
+            return *this;
         }
 
     private:
