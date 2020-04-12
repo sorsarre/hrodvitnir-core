@@ -1,7 +1,7 @@
 /*
 BSD 3-Clause License
 
-Copyright (c) 2019, Andrey Kaydalov
+Copyright (c) 2019-2020, Andrey Kaydalov
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
