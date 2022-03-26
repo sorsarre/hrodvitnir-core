@@ -36,5 +36,5 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 namespace hrodvitnir::core
 {
-    const reader_mapping::ptr get_base_mapping();
+const reader_mapping::ptr get_base_mapping();
 }

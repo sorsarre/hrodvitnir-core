@@ -37,61 +37,66 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 namespace hrodvitnir::core::boxes
 {
-    template<typename Base>
-    struct box: public Base
+template <typename Base>
+struct box : public Base
+{
+    MUCH_BLACKER_MAGICK(__pos, r_manual<uint64_t>);
+    MUCH_BLACKER_MAGICK(__size, r_manual<uint64_t>);
+    MUCH_BLACKER_MAGICK(size, r_uint<32>);
+    MUCH_BLACKER_MAGICK(type, r_fourcc);
+    MUCH_BLACKER_MAGICK(largesize, r_uint<64>);
+    MUCH_BLACKER_MAGICK(uuid, r_uuid);
+
+    [[nodiscard]] uint64_t box_size() const
     {
-        MUCH_BLACKER_MAGICK(__pos, r_manual<uint64_t>);
-        MUCH_BLACKER_MAGICK(__size, r_manual<uint64_t>);
-        MUCH_BLACKER_MAGICK(size, r_uint<32>);
-        MUCH_BLACKER_MAGICK(type, r_fourcc);
-        MUCH_BLACKER_MAGICK(largesize, r_uint<64>);
-        MUCH_BLACKER_MAGICK(uuid, r_uuid);
+        return __size;
+    }
 
-        [[nodiscard]]
-        uint64_t box_size() const
+    [[nodiscard]] uint64_t box_pos() const
+    {
+        return __pos;
+    }
+
+    [[nodiscard]] uint64_t box_end() const
+    {
+        return __pos() + __size();
+    }
+
+    template <typename Reader>
+    void read_basic(Reader& r)
+    {
+        __pos = r.position() / 8; // TODO: Add byte-counting functions
+        size << r;
+        type << r;
+        if (size == 1)
         {
-            return __size;
+            largesize << r;
+            __size = largesize;
+        }
+        else if (size == 0)
+        {
+            largesize = r.available() / 8; // TODO: Add byte-counting functions
+            __size = largesize;
+        }
+        else
+        {
+            __size = size;
         }
 
-        [[nodiscard]]
-        uint64_t box_pos() const
+        if (type() == fourcc("uuid"))
         {
-            return __pos;
+            uuid << r;
         }
-
-        [[nodiscard]]
-        uint64_t box_end() const
+        else
         {
-            return __pos() + __size();
+            uuid = uuid::from_fourcc(type);
         }
+    }
 
-        template<typename Reader>
-        void read_basic(Reader& r)
-        {
-            __pos = r.position() / 8; // TODO: Add byte-counting functions
-            size << r;
-            type << r;
-            if (size == 1) {
-                largesize << r;
-                __size = largesize;
-            } else if (size == 0) {
-                largesize = r.available() / 8; // TODO: Add byte-counting functions
-                __size = largesize;
-            } else {
-                __size = size;
-            }
-
-            if (type() == fourcc("uuid")) {
-                uuid << r;
-            } else {
-                uuid = uuid::from_fourcc(type);
-            }
-        }
-
-        template<typename Reader>
-        void read(Reader& r)
-        {
-            // nope, at least until I find a better way to get around that
-        }
-    };
-}
+    template <typename Reader>
+    void read(Reader& r)
+    {
+        // nope, at least until I find a better way to get around that
+    }
+};
+} // namespace hrodvitnir::core::boxes

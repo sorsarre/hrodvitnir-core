@@ -37,18 +37,18 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 namespace hrodvitnir::core
 {
-    // TODO: Move it over into bitreader
-    class data_source
-    {
-    public:
-        virtual size_t get_n(uint64_t& buf, size_t bytes) = 0;
-        virtual bool depleted() = 0;
-        virtual uint64_t available() = 0;
-        virtual uint64_t position() = 0;
-        virtual void seek(uint64_t position) = 0;
-        virtual void skip(uint64_t bytes) = 0;
-        virtual std::shared_ptr<data_source> clone() = 0;
+// TODO: Move it over into bitreader
+class data_source
+{
+  public:
+    virtual size_t get_n(uint64_t& buf, size_t bytes) = 0;
+    virtual bool depleted() = 0;
+    virtual uint64_t available() = 0;
+    virtual uint64_t position() = 0;
+    virtual void seek(uint64_t position) = 0;
+    virtual void skip(uint64_t bytes) = 0;
+    virtual std::shared_ptr<data_source> clone() = 0;
 
-        virtual ~data_source() = default;
-    };
-}
+    virtual ~data_source() = default;
+};
+} // namespace hrodvitnir::core

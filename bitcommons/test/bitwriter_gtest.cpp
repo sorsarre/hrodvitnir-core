@@ -29,42 +29,41 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include <gtest/gtest.h>
 #include <bitcommons/bitwriter.hpp>
-#include <bitcommons/codings/string-nullterm.hpp>
 #include <bitcommons/codings/exp-golomb-k0.hpp>
+#include <bitcommons/codings/string-nullterm.hpp>
+#include <gtest/gtest.h>
 #include <vector>
 
 using namespace bitcommons;
 
 //------------------------------------------------------------------------------
-namespace {
-    class TestWriterSink
+namespace
+{
+class TestWriterSink
+{
+  public:
+    void put(uint8_t data, size_t bits)
     {
-    public:
+        _data.push_back(data);
+    }
 
-        void put(uint8_t data, size_t bits)
-        {
-            _data.push_back(data);
-        }
+    size_t position() const
+    {
+        return _data.size();
+    }
 
-        size_t position() const
-        {
-            return _data.size();
-        }
+    const std::vector<uint8_t>& data() const
+    {
+        return _data;
+    }
 
-        const std::vector<uint8_t>& data() const
-        {
-            return _data;
-        }
+  private:
+    std::vector<uint8_t> _data;
+};
 
-    private:
-        std::vector<uint8_t> _data;
-    };
-
-    using bytes = std::vector<uint8_t>;
-}
-
+using bytes = std::vector<uint8_t>;
+} // namespace
 
 //------------------------------------------------------------------------------
 TEST(bitwriterTest, Create)

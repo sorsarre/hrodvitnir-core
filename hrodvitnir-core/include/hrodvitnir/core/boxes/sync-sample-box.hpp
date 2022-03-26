@@ -32,23 +32,23 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #pragma once
 #include <hrodvitnir/core/box-property.hpp>
-#include <hrodvitnir/core/table.hpp>
 #include <hrodvitnir/core/readspec.hpp>
+#include <hrodvitnir/core/table.hpp>
 
 namespace hrodvitnir::core::boxes
 {
-    template<typename Base>
-    struct sync_sample: public Base
+template <typename Base>
+struct sync_sample : public Base
+{
+    using r_stss_entry = r_uint<32>;
+
+    MUCH_BLACKER_MAGICK(_contents, r_array_table<r_stss_entry, r_uint<32>>);
+
+    template <typename Reader>
+    void read(Reader& r)
     {
-        using r_stss_entry = r_uint<32>;
-
-        MUCH_BLACKER_MAGICK(_contents, r_array_table<r_stss_entry, r_uint<32>>);
-
-        template<typename Reader>
-        void read(Reader& r)
-        {
-            Base::read(r);
-            _contents << r;
-        }
-    };
-}
+        Base::read(r);
+        _contents << r;
+    }
+};
+} // namespace hrodvitnir::core::boxes

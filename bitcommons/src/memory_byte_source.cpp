@@ -40,8 +40,7 @@ memory_byte_source::memory_byte_source()
 }
 
 //----------------------------------------------------------------------
-memory_byte_source::memory_byte_source(const uint8_t* data, size_t size)
-        : _data(shared_buffer::copy_mem(data, size))
+memory_byte_source::memory_byte_source(const uint8_t* data, size_t size) : _data(shared_buffer::copy_mem(data, size))
 {
     _current = _data.begin();
 }
@@ -49,12 +48,14 @@ memory_byte_source::memory_byte_source(const uint8_t* data, size_t size)
 //----------------------------------------------------------------------
 size_t memory_byte_source::get_n(uint64_t& buf, size_t bytes)
 {
-    if (_current == _data.end()) {
+    if (_current == _data.end())
+    {
         throw std::runtime_error("Access beyond data buffer boundaries");
     }
 
     auto to_shift = std::min(bytes, available());
-    for (size_t iter = 0; iter < to_shift; ++iter) {
+    for (size_t iter = 0; iter < to_shift; ++iter)
+    {
         buf <<= 8;
         buf |= *_current;
         ++_current;
@@ -85,7 +86,8 @@ uint64_t memory_byte_source::position()
 //----------------------------------------------------------------------
 void memory_byte_source::seek(uint64_t position)
 {
-    if (position > _data.size()) {
+    if (position > _data.size())
+    {
         throw std::range_error("Position outside of the data buffer");
     }
 
@@ -95,7 +97,8 @@ void memory_byte_source::seek(uint64_t position)
 //----------------------------------------------------------------------
 void memory_byte_source::skip(uint64_t bytes)
 {
-    if (bytes > available()) {
+    if (bytes > available())
+    {
         throw std::range_error("Cannot skip beyond the boundaries of the data buffer");
     }
 

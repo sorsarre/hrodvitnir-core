@@ -30,32 +30,32 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #pragma once
-#include <cstdint>
-#include <cstddef>
-#include <memory>
 #include <bitcommons/file_reader.hpp>
 #include <bitcommons/shared_buffer.hpp>
+#include <cstddef>
+#include <cstdint>
+#include <memory>
 
 namespace bitcommons
 {
-    class file_byte_source
-    {
-    public:
-        explicit file_byte_source(std::shared_ptr<file_reader> reader);
-        size_t get_n(uint64_t& buf, size_t bytes);
-        bool depleted();
-        uint64_t available();
-        uint64_t position();
-        void seek(uint64_t position);
-        void skip(uint64_t bytes);
-        std::shared_ptr<file_byte_source> clone();
+class file_byte_source
+{
+  public:
+    explicit file_byte_source(std::shared_ptr<file_reader> reader);
+    size_t get_n(uint64_t& buf, size_t bytes);
+    bool depleted();
+    uint64_t available();
+    uint64_t position();
+    void seek(uint64_t position);
+    void skip(uint64_t bytes);
+    std::shared_ptr<file_byte_source> clone();
 
-    private:
-        void load_buffer();
+  private:
+    void load_buffer();
 
-        std::shared_ptr<file_reader> _reader;
-        shared_buffer _buffer;
-        uint64_t _position;
-        uint64_t _last;
-    };
-}
+    std::shared_ptr<file_reader> _reader;
+    shared_buffer _buffer;
+    uint64_t _position;
+    uint64_t _last;
+};
+} // namespace bitcommons

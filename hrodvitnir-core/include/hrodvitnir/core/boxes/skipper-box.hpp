@@ -35,14 +35,14 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 namespace hrodvitnir::core::boxes
 {
-    template<typename Base>
-    struct skipper: public Base
+template <typename Base>
+struct skipper : public Base
+{
+    template <typename Reader>
+    void read(Reader& r)
     {
-        template<typename Reader>
-        void read(Reader& r)
-        {
-            Base::read(r);
-            r.seek(Base::box_end()*8);
-        }
-    };
-}
+        Base::read(r);
+        r.seek(Base::box_end() * 8);
+    }
+};
+} // namespace hrodvitnir::core::boxes

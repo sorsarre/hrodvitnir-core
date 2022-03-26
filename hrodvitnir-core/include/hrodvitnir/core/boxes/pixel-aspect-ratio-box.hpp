@@ -37,18 +37,18 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 namespace hrodvitnir::core::boxes
 {
 
-    template<typename Base>
-    struct pixel_aspect_ratio: public Base
-    {
-        MUCH_BLACKER_MAGICK(hSpacing, r_uint<32>);
-        MUCH_BLACKER_MAGICK(vSpacing, r_uint<32>);
+template <typename Base>
+struct pixel_aspect_ratio : public Base
+{
+    MUCH_BLACKER_MAGICK(hSpacing, r_uint<32>);
+    MUCH_BLACKER_MAGICK(vSpacing, r_uint<32>);
 
-        template<typename Reader>
-        void read(Reader& r)
-        {
-            Base::read(r);
-            hSpacing << r;
-            vSpacing << r;
-        }
-    };
-}
+    template <typename Reader>
+    void read(Reader& r)
+    {
+        Base::read(r);
+        hSpacing << r;
+        vSpacing << r;
+    }
+};
+} // namespace hrodvitnir::core::boxes

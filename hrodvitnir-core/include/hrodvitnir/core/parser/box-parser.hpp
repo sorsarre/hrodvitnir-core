@@ -31,20 +31,17 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #pragma once
+#include <hrodvitnir/core/box-consumer.hpp>
+#include <hrodvitnir/core/box-defs.hpp>
+#include <hrodvitnir/core/parser/reader-mapping.hpp>
 #include <memory>
 #include <stack>
-#include <hrodvitnir/core/box-consumer.hpp>
-#include <hrodvitnir/core/parser/reader-mapping.hpp>
-#include <hrodvitnir/core/box-defs.hpp>
 
 namespace hrodvitnir::core
 {
-    class box_parser
-    {
-    public:
-        void parse(
-                reader_type& reader,
-                reader_mapping::ptr mapping,
-                box_consumer::ptr consumer);
-    };
-}
+class box_parser
+{
+  public:
+    void parse(reader_type& reader, reader_mapping::ptr mapping, box_consumer::ptr consumer);
+};
+} // namespace hrodvitnir::core

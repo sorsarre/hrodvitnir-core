@@ -37,20 +37,20 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 namespace hrodvitnir::core::boxes
 {
 
-    template<typename Base>
-    struct handler: public Base
-    {
-        MUCH_BLACKER_MAGICK(handler_type, r_fourcc);
-        MUCH_BLACKER_MAGICK(name, r_string);
+template <typename Base>
+struct handler : public Base
+{
+    MUCH_BLACKER_MAGICK(handler_type, r_fourcc);
+    MUCH_BLACKER_MAGICK(name, r_string);
 
-        template<typename Reader>
-        void read(Reader& r)
-        {
-            Base::read(r);
-            r.skip(32); // pre_defined = 0;
-            handler_type << r;
-            r.skip(32 * 3); // reserved
-            name << r;
-        }
-    };
-}
+    template <typename Reader>
+    void read(Reader& r)
+    {
+        Base::read(r);
+        r.skip(32); // pre_defined = 0;
+        handler_type << r;
+        r.skip(32 * 3); // reserved
+        name << r;
+    }
+};
+} // namespace hrodvitnir::core::boxes

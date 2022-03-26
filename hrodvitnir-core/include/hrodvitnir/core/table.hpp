@@ -32,119 +32,110 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #pragma once
 
-
 namespace hrodvitnir::core
 {
-    //--------------------------------------------------------------------------
-    template<typename Entry>
-    class table
+//--------------------------------------------------------------------------
+template <typename Entry>
+class table
+{
+  public:
+    using entry_type = Entry;
+
+    virtual size_t size() const = 0;
+    virtual const entry_type at(size_t index) const = 0;
+
+    const entry_type& operator[](size_t index) const
     {
-    public:
-        using entry_type = Entry;
+        return this->at(index);
+    }
 
-        virtual size_t size() const = 0;
-        virtual const entry_type at(size_t index) const = 0;
+    virtual ~table() = default;
+};
 
-        const entry_type& operator[](size_t index) const
-        {
-            return this->at(index);
-        }
+//--------------------------------------------------------------------------
+template <typename Entry>
+class array_table : public table<Entry>
+{
+  public:
+    using entry_type = typename table<Entry>::entry_type;
+    using container_type = std::vector<entry_type>;
 
-        virtual ~table() = default;
-    };
+    //----------------------------------------------------------------------
+    array_table() = default;
+    array_table(array_table<Entry>&& other) = default;
 
-    //--------------------------------------------------------------------------
-    template<typename Entry>
-    class array_table: public table<Entry>
+    //----------------------------------------------------------------------
+    size_t size() const override
     {
-    public:
-        using entry_type = typename table<Entry>::entry_type;
-        using container_type = std::vector<entry_type>;
+        return _entries.size();
+    }
 
-        //----------------------------------------------------------------------
-        array_table() = default;
-        array_table(array_table<Entry>&& other) = default;
-
-        //----------------------------------------------------------------------
-        size_t size() const override
-        {
-            return _entries.size();
-        }
-
-        //----------------------------------------------------------------------
-        const entry_type at(size_t index) const override
-        {
-            return _entries.at(index);
-        }
-
-        //----------------------------------------------------------------------
-        const container_type& entries() const
-        {
-            return _entries;
-        }
-
-        //----------------------------------------------------------------------
-        container_type& entries()
-        {
-            return _entries;
-        }
-    private:
-        std::vector<Entry> _entries;
-    };
-
-    //--------------------------------------------------------------------------
-    template<typename Entry>
-    class fixed_table: public table<Entry>
+    //----------------------------------------------------------------------
+    const entry_type at(size_t index) const override
     {
-    public:
-        using entry_type = typename table<Entry>::entry_type;
+        return _entries.at(index);
+    }
 
-        //----------------------------------------------------------------------
-        fixed_table(fixed_table<entry_type>&& other)
-            : _size(other._size)
-            , _entry(std::move(other._entry))
+    //----------------------------------------------------------------------
+    const container_type& entries() const
+    {
+        return _entries;
+    }
+
+    //----------------------------------------------------------------------
+    container_type& entries()
+    {
+        return _entries;
+    }
+
+  private:
+    std::vector<Entry> _entries;
+};
+
+//--------------------------------------------------------------------------
+template <typename Entry>
+class fixed_table : public table<Entry>
+{
+  public:
+    using entry_type = typename table<Entry>::entry_type;
+
+    //----------------------------------------------------------------------
+    fixed_table(fixed_table<entry_type>&& other) : _size(other._size), _entry(std::move(other._entry)) {}
+
+    //----------------------------------------------------------------------
+    fixed_table(entry_type entry, size_t size) : _size(size), _entry(std::move(entry)) {}
+
+    //----------------------------------------------------------------------
+    size_t size() const override
+    {
+        return _size;
+    }
+
+    //----------------------------------------------------------------------
+    const entry_type at(size_t index) const override
+    {
+        if (index >= _size)
         {
-
+            throw std::range_error("Index out of bounds in fixed table");
         }
 
-        //----------------------------------------------------------------------
-        fixed_table(entry_type entry, size_t size)
-            : _size(size)
-            , _entry(std::move(entry))
-        {
+        return _entry;
+    }
 
-        }
+    //----------------------------------------------------------------------
+    const entry_type& entry() const
+    {
+        return _entry;
+    }
 
-        //----------------------------------------------------------------------
-        size_t size() const override
-        {
-            return _size;
-        }
+    //----------------------------------------------------------------------
+    entry_type& entry()
+    {
+        return _entry;
+    }
 
-        //----------------------------------------------------------------------
-        const entry_type at(size_t index) const override
-        {
-            if (index >= _size) {
-                throw std::range_error("Index out of bounds in fixed table");
-            }
-
-            return _entry;
-        }
-
-        //----------------------------------------------------------------------
-        const entry_type& entry() const
-        {
-            return _entry;
-        }
-
-        //----------------------------------------------------------------------
-        entry_type& entry()
-        {
-            return _entry;
-        }
-
-    private:
-        size_t _size;
-        entry_type _entry;
-    };
-}
+  private:
+    size_t _size;
+    entry_type _entry;
+};
+} // namespace hrodvitnir::core

@@ -34,26 +34,29 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 namespace hrodvitnir::core
 {
-    //--------------------------------------------------------------------------
-    simple_reader_mapping::simple_reader_mapping(const partial_reader_type& def_rd)
-    {
-        _default = def_rd;
-    }
+//--------------------------------------------------------------------------
+simple_reader_mapping::simple_reader_mapping(const partial_reader_type& def_rd)
+{
+    _default = def_rd;
+}
 
-    //--------------------------------------------------------------------------
-    const partial_reader_type& simple_reader_mapping::get(const uuid& u) const
+//--------------------------------------------------------------------------
+const partial_reader_type& simple_reader_mapping::get(const uuid& u) const
+{
+    auto iter = _registry.find(u);
+    if (iter != _registry.end())
     {
-        auto iter = _registry.find(u);
-        if (iter != _registry.end()) {
-            return iter->second;
-        } else {
-            return _default;
-        }
+        return iter->second;
     }
-
-    //--------------------------------------------------------------------------
-    void simple_reader_mapping::default_reader(fieldset& fs, reader_type& r)
+    else
     {
-        boxes::default_box_t{fs}.read(r);
+        return _default;
     }
 }
+
+//--------------------------------------------------------------------------
+void simple_reader_mapping::default_reader(fieldset& fs, reader_type& r)
+{
+    boxes::default_box_t{fs}.read(r);
+}
+} // namespace hrodvitnir::core

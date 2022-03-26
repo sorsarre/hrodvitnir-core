@@ -31,25 +31,25 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #pragma once
-#include <memory>
-#include <list>
 #include <hrodvitnir/core/tree/tree-node.hpp>
+#include <list>
+#include <memory>
 
 namespace hrodvitnir::core
 {
-    class tree
-    {
-    public:
-        using ptr = std::shared_ptr<tree>;
+class tree
+{
+  public:
+    using ptr = std::shared_ptr<tree>;
 
-        tree() = default;
-        void add_child(tree_node::ptr child);
-        const std::list<tree_node::ptr> children() const;
+    tree() = default;
+    void add_child(tree_node::ptr child);
+    const std::list<tree_node::ptr> children() const;
 
-    private:
-        tree(const tree&) = delete;
-        tree& operator=(const tree&) = delete;
+  private:
+    tree(const tree&) = delete;
+    tree& operator=(const tree&) = delete;
 
-        std::list<tree_node::ptr> _children;
-    };
-}
+    std::list<tree_node::ptr> _children;
+};
+} // namespace hrodvitnir::core

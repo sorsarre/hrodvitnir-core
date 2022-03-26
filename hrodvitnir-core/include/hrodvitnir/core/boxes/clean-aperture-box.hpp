@@ -37,37 +37,37 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 namespace hrodvitnir::core::boxes
 {
 
-    template<typename Base>
-    struct clean_aperture: public Base
+template <typename Base>
+struct clean_aperture : public Base
+{
+    // TODO: replace with a rational
+    MUCH_BLACKER_MAGICK(cleanApertureWidthN, r_uint<32>);
+    MUCH_BLACKER_MAGICK(cleanApertureWidthD, r_uint<32>);
+
+    MUCH_BLACKER_MAGICK(cleanApertureHeightN, r_uint<32>);
+    MUCH_BLACKER_MAGICK(cleanApertureHeightD, r_uint<32>);
+
+    MUCH_BLACKER_MAGICK(horizOffN, r_uint<32>);
+    MUCH_BLACKER_MAGICK(horizOffD, r_uint<32>);
+
+    MUCH_BLACKER_MAGICK(vertOffN, r_uint<32>);
+    MUCH_BLACKER_MAGICK(vertOffD, r_uint<32>);
+
+    template <typename Reader>
+    void read(Reader& r)
     {
-        // TODO: replace with a rational
-        MUCH_BLACKER_MAGICK(cleanApertureWidthN, r_uint<32>);
-        MUCH_BLACKER_MAGICK(cleanApertureWidthD, r_uint<32>);
+        Base::read(r);
+        cleanApertureWidthN << r;
+        cleanApertureWidthD << r;
 
-        MUCH_BLACKER_MAGICK(cleanApertureHeightN, r_uint<32>);
-        MUCH_BLACKER_MAGICK(cleanApertureHeightD, r_uint<32>);
+        cleanApertureHeightN << r;
+        cleanApertureHeightD << r;
 
-        MUCH_BLACKER_MAGICK(horizOffN, r_uint<32>);
-        MUCH_BLACKER_MAGICK(horizOffD, r_uint<32>);
+        horizOffN << r;
+        horizOffD << r;
 
-        MUCH_BLACKER_MAGICK(vertOffN, r_uint<32>);
-        MUCH_BLACKER_MAGICK(vertOffD, r_uint<32>);
-
-        template<typename Reader>
-        void read(Reader& r)
-        {
-            Base::read(r);
-            cleanApertureWidthN << r;
-            cleanApertureWidthD << r;
-
-            cleanApertureHeightN << r;
-            cleanApertureHeightD << r;
-
-            horizOffN << r;
-            horizOffD << r;
-
-            vertOffN << r;
-            vertOffD << r;
-        }
-    };
-}
+        vertOffN << r;
+        vertOffD << r;
+    }
+};
+} // namespace hrodvitnir::core::boxes

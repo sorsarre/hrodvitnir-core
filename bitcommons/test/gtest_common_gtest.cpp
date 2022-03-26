@@ -29,9 +29,11 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include <csignal>
 #include "gtest/gtest.h"
+
 #include "gtest_common.hpp"
+
+#include <csignal>
 
 //------------------------------------------------------------------------------
 TEST(testData, zeroSize)
@@ -46,8 +48,9 @@ TEST(testData, contents)
     const size_t size = 10;
     auto data = generate_test_data(size);
     EXPECT_NE(nullptr, data);
-    for (size_t iter = 0; iter < size; ++iter) {
-        EXPECT_EQ(iter+1, data[iter]);
+    for (size_t iter = 0; iter < size; ++iter)
+    {
+        EXPECT_EQ(iter + 1, data[iter]);
     }
     delete[] data;
 }
@@ -81,21 +84,23 @@ TEST(fakeFileReaderTest, nonZeroSize)
     EXPECT_NO_THROW(read = reader.read(buffer, 0, 0));
     EXPECT_EQ(0, read);
 
-    EXPECT_NO_THROW(read = reader.read(buffer, 0, size/2));
-    EXPECT_EQ(size/2, read);
-    for (size_t iter = 0; iter < size/2; ++iter) {
-        EXPECT_EQ(iter+1, buffer[iter]);
+    EXPECT_NO_THROW(read = reader.read(buffer, 0, size / 2));
+    EXPECT_EQ(size / 2, read);
+    for (size_t iter = 0; iter < size / 2; ++iter)
+    {
+        EXPECT_EQ(iter + 1, buffer[iter]);
     }
 
-    EXPECT_NO_THROW(read = reader.read(buffer, size/2, size/2));
-    EXPECT_EQ(size/2, read);
-    for (size_t iter = size/2; iter < size/2; ++iter) {
-        EXPECT_EQ(iter+1, buffer[iter]);
+    EXPECT_NO_THROW(read = reader.read(buffer, size / 2, size / 2));
+    EXPECT_EQ(size / 2, read);
+    for (size_t iter = size / 2; iter < size / 2; ++iter)
+    {
+        EXPECT_EQ(iter + 1, buffer[iter]);
     }
 
-    EXPECT_NO_THROW(read = reader.read(buffer, size, size/2));
+    EXPECT_NO_THROW(read = reader.read(buffer, size, size / 2));
     EXPECT_EQ(0, read);
 
-    EXPECT_ANY_THROW(reader.read(buffer, size+1, size/2));
-    EXPECT_ANY_THROW(reader.read(buffer, size+1, 0));
+    EXPECT_ANY_THROW(reader.read(buffer, size + 1, size / 2));
+    EXPECT_ANY_THROW(reader.read(buffer, size + 1, 0));
 }

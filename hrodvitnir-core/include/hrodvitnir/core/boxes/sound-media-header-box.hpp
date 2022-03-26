@@ -37,17 +37,17 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 namespace hrodvitnir::core::boxes
 {
 
-    template<typename Base>
-    struct sound_media_header: public Base
-    {
-        MUCH_BLACKER_MAGICK(balance, r_qmn<uint16_t, 8>);
+template <typename Base>
+struct sound_media_header : public Base
+{
+    MUCH_BLACKER_MAGICK(balance, r_qmn<uint16_t, 8>);
 
-        template<typename Reader>
-        void read(Reader& r)
-        {
-            Base::read(r);
-            balance << r;
-            r.skip(16); // reserved
-        }
-    };
-}
+    template <typename Reader>
+    void read(Reader& r)
+    {
+        Base::read(r);
+        balance << r;
+        r.skip(16); // reserved
+    }
+};
+} // namespace hrodvitnir::core::boxes

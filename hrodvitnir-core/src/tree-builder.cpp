@@ -34,39 +34,42 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 namespace hrodvitnir::core
 {
-    //--------------------------------------------------------------------------
-    tree_builder::tree_builder()
-    {
-        _tree = std::make_shared<tree>();
-    }
-
-    //--------------------------------------------------------------------------
-    void tree_builder::box_announce(uint64_t position, const uuid& id)
-    {
-        // nope, nothing to do here
-    }
-
-    //--------------------------------------------------------------------------
-    void tree_builder::box_open(const std::shared_ptr<fieldset>& fs)
-    {
-        auto node = std::make_shared<tree_node>(fs);
-        if (_stack.empty()) {
-            _tree->add_child(node);
-        } else {
-            _stack.top()->add_child(node);
-        }
-        _stack.push(node);
-    }
-
-    //--------------------------------------------------------------------------
-    void tree_builder::box_close(uint64_t position)
-    {
-        _stack.pop();
-    }
-
-    //--------------------------------------------------------------------------
-    tree::ptr tree_builder::get() const
-    {
-        return _tree; // TODO: Make it an honest const
-    }
+//--------------------------------------------------------------------------
+tree_builder::tree_builder()
+{
+    _tree = std::make_shared<tree>();
 }
+
+//--------------------------------------------------------------------------
+void tree_builder::box_announce(uint64_t position, const uuid& id)
+{
+    // nope, nothing to do here
+}
+
+//--------------------------------------------------------------------------
+void tree_builder::box_open(const std::shared_ptr<fieldset>& fs)
+{
+    auto node = std::make_shared<tree_node>(fs);
+    if (_stack.empty())
+    {
+        _tree->add_child(node);
+    }
+    else
+    {
+        _stack.top()->add_child(node);
+    }
+    _stack.push(node);
+}
+
+//--------------------------------------------------------------------------
+void tree_builder::box_close(uint64_t position)
+{
+    _stack.pop();
+}
+
+//--------------------------------------------------------------------------
+tree::ptr tree_builder::get() const
+{
+    return _tree; // TODO: Make it an honest const
+}
+} // namespace hrodvitnir::core

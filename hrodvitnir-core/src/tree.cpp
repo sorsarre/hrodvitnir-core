@@ -34,15 +34,15 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 namespace hrodvitnir::core
 {
-    //--------------------------------------------------------------------------
-    void tree::add_child(tree_node::ptr child)
-    {
-        _children.push_back(child);
-    }
-
-    //--------------------------------------------------------------------------
-    const std::list<tree_node::ptr> tree::children() const
-    {
-        return _children;
-    }
+//--------------------------------------------------------------------------
+void tree::add_child(tree_node::ptr child)
+{
+    _children.push_back(child);
 }
+
+//--------------------------------------------------------------------------
+const std::list<tree_node::ptr> tree::children() const
+{
+    return _children;
+}
+} // namespace hrodvitnir::core

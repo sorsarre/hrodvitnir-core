@@ -30,25 +30,24 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include <iostream>
+#include "any_printer.hpp"
 
 #include <bitcommons/bitreader.hpp>
 #include <bitcommons/direct_file_reader.hpp>
 #include <bitcommons/file_byte_source.hpp>
-
-#include <hrodvitnir/core/parser/box-parser.hpp>
 #include <hrodvitnir/core/data-source-wrapper.hpp>
-#include <hrodvitnir/core/tree/tree-builder.hpp>
+#include <hrodvitnir/core/parser/box-parser.hpp>
 #include <hrodvitnir/core/parser/default-mapping.hpp>
-
-#include "any_printer.hpp"
+#include <hrodvitnir/core/tree/tree-builder.hpp>
+#include <iostream>
 
 using namespace hrodvitnir;
 namespace brcpp = bitcommons;
 
-
-int main(int argc, char** argv) {
-    if (argc < 2) {
+int main(int argc, char** argv)
+{
+    if (argc < 2)
+    {
         std::cerr << "[ERROR] too few arguments, please supply file name" << std::endl;
         return 1;
     }

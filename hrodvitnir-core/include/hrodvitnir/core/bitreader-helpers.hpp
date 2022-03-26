@@ -31,21 +31,22 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #pragma once
+#include <bitcommons/bitreader-utils.hpp>
 #include <cstddef>
 #include <utility>
-#include <bitcommons/bitreader-utils.hpp>
 
 namespace hrodvitnir::brext
 {
-    template<typename T>
-    struct array_reader
+template <typename T>
+struct array_reader
+{
+    template <typename Reader, typename Iter, typename... Args>
+    static void read(Reader& r, Iter iter, size_t count, Args&&... args)
     {
-        template<typename Reader, typename Iter, typename... Args>
-        static void read(Reader& r, Iter iter, size_t count, Args&&... args)
+        for (size_t i = 0; i < count; ++i)
         {
-            for (size_t i = 0; i < count; ++i) {
-                *iter = r.template read<T>(std::forward<Args>(args)...);
-            }
+            *iter = r.template read<T>(std::forward<Args>(args)...);
         }
-    };
-}
+    }
+};
+} // namespace hrodvitnir::brext

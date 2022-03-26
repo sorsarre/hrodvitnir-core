@@ -36,28 +36,28 @@ using namespace bitcommons;
 
 //----------------------------------------------------------------------
 file_byte_source::file_byte_source(std::shared_ptr<file_reader> reader)
-        : _reader(std::move(reader)),
-          _buffer(shared_buffer::allocate(32 * 1024)) // TODO: Magic number, replace it
-        , _position(0), _last(0) {
-
+    : _reader(std::move(reader)), _buffer(shared_buffer::allocate(32 * 1024)) // TODO: Magic number, replace it
+      ,
+      _position(0), _last(0)
+{
 }
 
 //----------------------------------------------------------------------
-size_t file_byte_source::get_n(uint64_t& buf, size_t bytes) {
-    if (
-            _position < _last ||
-            _position + bytes >= _last + _buffer.size() ||
-            _buffer.size() == 0)
+size_t file_byte_source::get_n(uint64_t& buf, size_t bytes)
+{
+    if (_position < _last || _position + bytes >= _last + _buffer.size() || _buffer.size() == 0)
     {
         load_buffer();
     }
 
-    if (_buffer.size() == 0 && available() == 0) {
+    if (_buffer.size() == 0 && available() == 0)
+    {
         throw std::runtime_error("Cannot read beyond the end of the file");
     }
 
     auto to_shift = std::min(available(), bytes);
-    for (size_t iter = 0; iter < to_shift; ++iter) {
+    for (size_t iter = 0; iter < to_shift; ++iter)
+    {
         buf <<= 8;
         buf |= _buffer.get()[_position - _last];
         ++_position;
@@ -67,23 +67,28 @@ size_t file_byte_source::get_n(uint64_t& buf, size_t bytes) {
 }
 
 //----------------------------------------------------------------------
-bool file_byte_source::depleted() {
+bool file_byte_source::depleted()
+{
     return _reader->depleted();
 }
 
 //----------------------------------------------------------------------
-uint64_t file_byte_source::available() {
+uint64_t file_byte_source::available()
+{
     return _reader->size() - _position;
 }
 
 //----------------------------------------------------------------------
-uint64_t file_byte_source::position() {
+uint64_t file_byte_source::position()
+{
     return _position;
 }
 
 //----------------------------------------------------------------------
-void file_byte_source::seek(uint64_t position) {
-    if (position > _reader->size()) {
+void file_byte_source::seek(uint64_t position)
+{
+    if (position > _reader->size())
+    {
         throw std::range_error("Cannot seek beyond file size");
     }
 
@@ -91,8 +96,10 @@ void file_byte_source::seek(uint64_t position) {
 }
 
 //----------------------------------------------------------------------
-void file_byte_source::skip(uint64_t bytes) {
-    if (bytes > available()) {
+void file_byte_source::skip(uint64_t bytes)
+{
+    if (bytes > available())
+    {
         throw std::range_error("Cannot skip beyond file size");
     }
 

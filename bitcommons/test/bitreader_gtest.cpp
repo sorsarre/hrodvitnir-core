@@ -29,10 +29,10 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include <gtest/gtest.h>
-#include <bitcommons/memory_byte_source.hpp>
 #include <bitcommons/bitreader.hpp>
 #include <bitcommons/codings/exp-golomb-k0.hpp>
+#include <bitcommons/memory_byte_source.hpp>
+#include <gtest/gtest.h>
 
 using namespace bitcommons;
 
@@ -172,7 +172,7 @@ TEST(bitreaderTest, skip_non_cross_aligned)
     const uint8_t data[] = {0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0x99};
     auto source = std::make_shared<source_t>(data, sizeof(data));
     bitreader<source_t> br(source);
-    EXPECT_NO_THROW(br.skip(3*8));
+    EXPECT_NO_THROW(br.skip(3 * 8));
     EXPECT_EQ(24, br.position());
     EXPECT_EQ(48, br.available());
     EXPECT_EQ(0x445, br.read<uint16_t>(12));
@@ -309,7 +309,7 @@ TEST(bitreaderTest, align_lt_byte_unaligned)
 //------------------------------------------------------------------------------
 TEST(bitreaderTest, exp_golomb_k0)
 {
-    const uint8_t data[] = {0b1'010'011'0, 0b0100'0000 };
+    const uint8_t data[] = {0b1'010'011'0, 0b0100'0000};
     auto source = std::make_shared<source_t>(data, sizeof(data));
     bitreader<source_t> br(source);
 

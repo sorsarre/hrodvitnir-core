@@ -29,22 +29,24 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include <gtest/gtest.h>
 #include <bitcommons/shared_buffer.hpp>
+#include <gtest/gtest.h>
 
 using namespace bitcommons;
 
-namespace {
-    uint8_t* create_test_data(size_t count)
+namespace
+{
+uint8_t* create_test_data(size_t count)
+{
+    auto ret = new uint8_t[count];
+    for (size_t iter = 0; iter < count; ++iter)
     {
-        auto ret = new uint8_t[count];
-        for (size_t iter = 0; iter < count; ++iter) {
-            ret[iter] = static_cast<uint8_t>(iter);
-        }
-
-        return ret;
+        ret[iter] = static_cast<uint8_t>(iter);
     }
+
+    return ret;
 }
+} // namespace
 
 //------------------------------------------------------------------------------
 TEST(sharedBufferTest, testCtor)
@@ -65,7 +67,7 @@ TEST(sharedBufferTest, wrap_mem)
     EXPECT_EQ(size, buf.size());
     EXPECT_EQ(size, buf.capacity());
     EXPECT_NO_FATAL_FAILURE((void)buf.get()[0]);
-    EXPECT_NO_FATAL_FAILURE((void)buf.get()[size-1]);
+    EXPECT_NO_FATAL_FAILURE((void)buf.get()[size - 1]);
 }
 
 //------------------------------------------------------------------------------
@@ -78,8 +80,8 @@ TEST(sharedBufferTest, copy_mem)
     EXPECT_EQ(size, buf.size());
     EXPECT_EQ(size, buf.capacity());
     EXPECT_NO_FATAL_FAILURE((void)buf.get()[0]);
-    EXPECT_NO_FATAL_FAILURE((void)buf.get()[size-1]);
-    EXPECT_TRUE(std::equal(data, data+size, buf.get()));
+    EXPECT_NO_FATAL_FAILURE((void)buf.get()[size - 1]);
+    EXPECT_TRUE(std::equal(data, data + size, buf.get()));
     delete[] data;
 }
 
@@ -94,7 +96,7 @@ TEST(sharedBufferTest, clone)
     EXPECT_EQ(buf1.size(), buf2.size());
     EXPECT_EQ(buf1.capacity(), buf2.capacity());
     EXPECT_NO_FATAL_FAILURE((void)buf2.get()[0]);
-    EXPECT_NO_FATAL_FAILURE((void)buf2.get()[size-1]);
+    EXPECT_NO_FATAL_FAILURE((void)buf2.get()[size - 1]);
     EXPECT_TRUE(std::equal(buf2.cbegin(), buf2.cend(), buf1.cbegin()));
 }
 
@@ -126,7 +128,7 @@ TEST(sharedBufferTest, copy)
     EXPECT_EQ(buf1.size(), buf2.size());
     EXPECT_EQ(buf1.capacity(), buf2.capacity());
     EXPECT_NO_FATAL_FAILURE((void)buf2.get()[0]);
-    EXPECT_NO_FATAL_FAILURE((void)buf2.get()[size-1]);
+    EXPECT_NO_FATAL_FAILURE((void)buf2.get()[size - 1]);
 }
 
 //------------------------------------------------------------------------------
@@ -140,7 +142,7 @@ TEST(sharedBufferTest, copyCtor)
     EXPECT_EQ(buf1.size(), buf2.size());
     EXPECT_EQ(buf1.capacity(), buf2.capacity());
     EXPECT_NO_FATAL_FAILURE((void)buf2.get()[0]);
-    EXPECT_NO_FATAL_FAILURE((void)buf2.get()[size-1]);
+    EXPECT_NO_FATAL_FAILURE((void)buf2.get()[size - 1]);
 }
 
 //------------------------------------------------------------------------------
@@ -154,7 +156,7 @@ TEST(sharedBufferTest, moveCtor)
     EXPECT_EQ(size, buf2.size());
     EXPECT_EQ(size, buf2.capacity());
     EXPECT_NO_FATAL_FAILURE((void)buf2.get()[0]);
-    EXPECT_NO_FATAL_FAILURE((void)buf2.get()[size-1]);
+    EXPECT_NO_FATAL_FAILURE((void)buf2.get()[size - 1]);
 }
 
 //------------------------------------------------------------------------------
@@ -176,13 +178,13 @@ TEST(sharedBufferTest, resizeLess)
     const size_t size = 4;
     auto data = create_test_data(size);
     auto buf1 = shared_buffer::wrap_mem(data, size);
-    const size_t new_size = size/2;
+    const size_t new_size = size / 2;
     EXPECT_NO_FATAL_FAILURE(buf1.resize(new_size));
     EXPECT_TRUE(buf1);
     EXPECT_EQ(data, buf1.get());
     EXPECT_EQ(new_size, buf1.size());
     EXPECT_EQ(size, buf1.capacity());
-    EXPECT_TRUE(std::equal(data, data+new_size, buf1.cbegin()));
+    EXPECT_TRUE(std::equal(data, data + new_size, buf1.cbegin()));
 }
 
 //------------------------------------------------------------------------------
@@ -204,12 +206,12 @@ TEST(sharedBufferTest, resizeLarger)
     const size_t size = 4;
     auto data = create_test_data(size);
     auto buf = shared_buffer::copy_mem(data, size);
-    EXPECT_NO_FATAL_FAILURE(buf.resize(size*2));
+    EXPECT_NO_FATAL_FAILURE(buf.resize(size * 2));
     EXPECT_TRUE(buf);
     EXPECT_NE(data, buf.get());
-    EXPECT_EQ(size*2, buf.size());
-    EXPECT_EQ(size*2, buf.capacity());
-    EXPECT_TRUE(std::equal(data, data+size, buf.cbegin()));
+    EXPECT_EQ(size * 2, buf.size());
+    EXPECT_EQ(size * 2, buf.capacity());
+    EXPECT_TRUE(std::equal(data, data + size, buf.cbegin()));
     delete[] data;
 }
 
@@ -232,11 +234,11 @@ TEST(sharedBufferTest, reallocLess)
     const size_t size = 4;
     auto data = create_test_data(size);
     auto buf = shared_buffer::copy_mem(data, size);
-    EXPECT_NO_FATAL_FAILURE(buf.realloc(size/2));
+    EXPECT_NO_FATAL_FAILURE(buf.realloc(size / 2));
     EXPECT_TRUE(buf);
     EXPECT_NE(data, buf.get());
-    EXPECT_EQ(size/2, buf.size());
-    EXPECT_EQ(size/2, buf.capacity());
+    EXPECT_EQ(size / 2, buf.size());
+    EXPECT_EQ(size / 2, buf.capacity());
     EXPECT_TRUE(std::equal(buf.cbegin(), buf.cend(), data));
     delete[] data;
 }
@@ -253,7 +255,7 @@ TEST(sharedBufferTest, reallocEqual)
     EXPECT_EQ(size, buf.size());
     EXPECT_EQ(size, buf.capacity());
     EXPECT_NO_FATAL_FAILURE((void)buf.get()[0]);
-    EXPECT_NO_FATAL_FAILURE((void)buf.get()[size-1]);
+    EXPECT_NO_FATAL_FAILURE((void)buf.get()[size - 1]);
 }
 
 //------------------------------------------------------------------------------
@@ -262,13 +264,13 @@ TEST(sharedBufferTest, reallocLarger)
     const size_t size = 4;
     auto data = create_test_data(size);
     auto buf = shared_buffer::copy_mem(data, size);
-    EXPECT_NO_FATAL_FAILURE(buf.realloc(size*2));
+    EXPECT_NO_FATAL_FAILURE(buf.realloc(size * 2));
     EXPECT_TRUE(buf);
     EXPECT_EQ(size, buf.size());
-    EXPECT_EQ(size*2, buf.capacity());
+    EXPECT_EQ(size * 2, buf.capacity());
     EXPECT_NO_FATAL_FAILURE((void)buf.get()[0]);
-    EXPECT_NO_FATAL_FAILURE((void)buf.get()[size*2-1]);
-    EXPECT_TRUE(std::equal(data, data+size, buf.cbegin()));
+    EXPECT_NO_FATAL_FAILURE((void)buf.get()[size * 2 - 1]);
+    EXPECT_TRUE(std::equal(data, data + size, buf.cbegin()));
     delete[] data;
 }
 
@@ -281,5 +283,5 @@ TEST(sharedBufferTest, allocate)
     EXPECT_EQ(0, buf.size());
     EXPECT_EQ(size, buf.capacity());
     EXPECT_NO_FATAL_FAILURE((void)buf.get()[0]);
-    EXPECT_NO_FATAL_FAILURE((void)buf.get()[size-1]);
+    EXPECT_NO_FATAL_FAILURE((void)buf.get()[size - 1]);
 }

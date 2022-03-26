@@ -36,18 +36,18 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 namespace hrodvitnir::core::boxes
 {
-    template<typename Base>
-    struct full_box: public Base
-    {
-        MUCH_BLACKER_MAGICK(version, r_uint<8>);
-        MUCH_BLACKER_MAGICK(flags, r_bit<24>);
+template <typename Base>
+struct full_box : public Base
+{
+    MUCH_BLACKER_MAGICK(version, r_uint<8>);
+    MUCH_BLACKER_MAGICK(flags, r_bit<24>);
 
-        template<typename Reader>
-        void read(Reader& r)
-        {
-            Base::read(r);
-            version << r;
-            flags << r;
-        }
-    };
-}
+    template <typename Reader>
+    void read(Reader& r)
+    {
+        Base::read(r);
+        version << r;
+        flags << r;
+    }
+};
+} // namespace hrodvitnir::core::boxes

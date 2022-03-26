@@ -37,18 +37,18 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 namespace hrodvitnir::core::boxes
 {
 
-    template<typename Base>
-    struct video_media_header: public Base
-    {
-        MUCH_BLACKER_MAGICK(graphicsmode, r_uint<16>);
-        MUCH_BLACKER_MAGICK(opcolor, r_array<3, r_uint<16>>);
+template <typename Base>
+struct video_media_header : public Base
+{
+    MUCH_BLACKER_MAGICK(graphicsmode, r_uint<16>);
+    MUCH_BLACKER_MAGICK(opcolor, r_array<3, r_uint<16>>);
 
-        template<typename Reader>
-        void read(Reader& r)
-        {
-            Base::read(r);
-            graphicsmode << r;
-            opcolor << r;
-        }
-    };
-}
+    template <typename Reader>
+    void read(Reader& r)
+    {
+        Base::read(r);
+        graphicsmode << r;
+        opcolor << r;
+    }
+};
+} // namespace hrodvitnir::core::boxes
