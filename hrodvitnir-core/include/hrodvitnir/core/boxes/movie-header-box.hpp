@@ -33,10 +33,9 @@ struct movie_header : public Base
         duration << read_args(r, bitcount);
         rate << r;
         volume << r;
-        r.skip(16);     // reserved
-        r.skip(32 * 2); // reserved
+        r.skip_bytes(10); // reserved
         matrix << r;
-        r.skip(32 * 6); // reserved
+        r.skip_bytes(24); // reserved
         next_track_ID << r;
     }
 };

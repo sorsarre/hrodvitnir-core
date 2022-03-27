@@ -25,16 +25,16 @@ struct visual_sample_entry : public Base
     void read(Reader& r)
     {
         Base::read(r);
-        r.skip(16 + 16 + 32 * 3); // various reserved fields
+        r.skip_bytes(16); // various reserved fields
         width << r;
         height << r;
         horizresolution << r;
         vertresolution << r;
-        r.skip(32); // reserved
+        r.skip_bytes(4); // reserved
         frame_count << r;
         compressorname << r;
         depth << r;
-        r.skip(16); // predefined
+        r.skip_bytes(2); // predefined
     }
 };
 } // namespace hrodvitnir::core::boxes

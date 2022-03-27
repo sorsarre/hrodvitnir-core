@@ -34,17 +34,17 @@ struct track_header : public Base
         modification_time << read_args(r, bitcount);
         ;
         track_ID << r;
-        r.skip(32); // reserved
+        r.skip_bytes(4); // reserved
         duration << read_args(r, bitcount);
         ;
 
-        r.skip(32 * 2); // reserved
+        r.skip_bytes(8); // reserved
 
         layer << r;
         alternate_group << r;
         volume << r;
 
-        r.skip(16); // reserved
+        r.skip_bytes(2); // reserved
 
         matrix << r;
         width << r;

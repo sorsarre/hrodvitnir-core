@@ -19,7 +19,7 @@ struct sample_entry : public Base
     void read(Reader& r)
     {
         Base::read(r);
-        r.skip(8 * 6); // reserved
+        r.skip_bytes(6); // reserved
         data_reference_index << r;
     }
 };

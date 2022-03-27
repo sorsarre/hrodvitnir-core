@@ -20,9 +20,9 @@ struct handler : public Base
     void read(Reader& r)
     {
         Base::read(r);
-        r.skip(32); // pre_defined = 0;
+        r.skip_bytes(4); // pre_defined = 0;
         handler_type << r;
-        r.skip(32 * 3); // reserved
+        r.skip_bytes(12); // reserved
         name << r;
     }
 };

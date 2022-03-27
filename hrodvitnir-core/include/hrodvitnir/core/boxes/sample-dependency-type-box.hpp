@@ -41,7 +41,7 @@ struct sample_dependency_type : public Base
     void read(Reader& r)
     {
         Base::read(r);
-        auto pos = r.position() / 8;
+        auto pos = r.position_bytes();
         auto rest = Base::box_end() - pos;
         _contents << read_args(r, rest);
     }

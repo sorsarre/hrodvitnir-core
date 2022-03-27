@@ -37,11 +37,29 @@ class bitreader
     }
 
     /**
+     * @return Current position in the input stream (in bytes)
+     */
+    size_t position_bytes() const
+    {
+        const auto pos = _position(_state);
+        assert(pos % 8 == 0);
+        return pos;
+    }
+
+    /**
      * @return The number of bits available for reading
      */
     size_t available() const
     {
         return _available(_state);
+    }
+
+    /**
+     * @return The number of bytes available for reading
+     */
+    size_t available_bytes() const
+    {
+        return _available(_state) / 8;
     }
 
     /**
@@ -56,6 +74,15 @@ class bitreader
         _state.source->seek(byte_pos);
         _state.shift = 0;
         _skip(_state, bits_to_skip);
+    }
+
+    /**
+     * @brief Set the current position in the input stream
+     * @param pos Position to seek towards
+     */
+    void seek_bytes(size_t pos)
+    {
+        seek(pos * 8);
     }
 
     /**
@@ -74,6 +101,15 @@ class bitreader
     void skip(size_t bits)
     {
         _skip(_state, bits);
+    }
+
+    /**
+     * @brief Skip the specified number of bytes in the stream
+     * @param bytes Number of bytes to skip
+     */
+    void skip_bytes(size_t bytes)
+    {
+        _skip(_state, bytes * 8);
     }
 
     //----------------------------------------------------------------------

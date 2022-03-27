@@ -38,7 +38,7 @@ struct box : public Base
     template <typename Reader>
     void read_basic(Reader& r)
     {
-        __pos = r.position() / 8; // TODO: Add byte-counting functions
+        __pos = r.position_bytes();
         size << r;
         type << r;
         if (size == 1)
@@ -48,7 +48,7 @@ struct box : public Base
         }
         else if (size == 0)
         {
-            largesize = r.available() / 8; // TODO: Add byte-counting functions
+            largesize = r.available_bytes();
             __size = largesize;
         }
         else

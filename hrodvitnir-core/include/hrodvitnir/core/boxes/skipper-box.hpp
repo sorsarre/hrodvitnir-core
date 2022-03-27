@@ -15,7 +15,7 @@ struct skipper : public Base
     void read(Reader& r)
     {
         Base::read(r);
-        r.seek(Base::box_end() * 8);
+        r.seek_bytes(Base::box_end());
     }
 };
 } // namespace hrodvitnir::core::boxes

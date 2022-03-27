@@ -23,7 +23,7 @@ struct file_type : public Base
         major_brand << r;
         minor_version << r;
 
-        size_t count = (Base::box_end() - r.position() / 8) / 4;
+        size_t count = (Base::box_end() - r.position_bytes()) / 4;
         compatible_brands << read_args(r, count);
     }
 };

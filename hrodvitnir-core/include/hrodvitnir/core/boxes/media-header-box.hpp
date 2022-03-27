@@ -32,7 +32,7 @@ struct media_header : public Base
         r.skip(1); // padding
         language << r;
 
-        r.skip(16); // reserved
+        r.skip_bytes(2); // reserved
     }
 };
 } // namespace hrodvitnir::core::boxes

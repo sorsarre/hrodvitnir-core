@@ -20,7 +20,7 @@ struct sound_media_header : public Base
     {
         Base::read(r);
         balance << r;
-        r.skip(16); // reserved
+        r.skip_bytes(2); // reserved
     }
 };
 } // namespace hrodvitnir::core::boxes
