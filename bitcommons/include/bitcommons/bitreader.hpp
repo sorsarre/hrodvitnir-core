@@ -43,7 +43,7 @@ class bitreader
     {
         const auto pos = _position(_state);
         assert(pos % 8 == 0);
-        return pos;
+        return pos / 8;
     }
 
     /**
