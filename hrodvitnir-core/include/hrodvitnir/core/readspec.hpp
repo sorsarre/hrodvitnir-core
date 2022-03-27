@@ -12,18 +12,13 @@
 #include <hrodvitnir/core/meta-helpers.hpp>
 #include <hrodvitnir/core/table.hpp>
 #include <hrodvitnir/core/uuid.hpp>
+#include <type_traits>
 #include <vector>
 
 namespace hrodvitnir::core
 {
 //--------------------------------------------------------------------------
 using dummy_reader_type = bitcommons::bitreader<bitcommons::abstract_byte_source>;
-
-//--------------------------------------------------------------------------
-constexpr dummy_reader_type& dummy_reader()
-{
-    return *(dummy_reader_type*)(nullptr);
-}
 
 //--------------------------------------------------------------------------
 template <size_t Bits>
@@ -344,7 +339,7 @@ struct r_array_table
 template <auto Lambda>
 struct r_lambda
 {
-    using value_type = decltype(Lambda(dummy_reader()));
+    using value_type = std::invoke_result_t<decltype(Lambda), dummy_reader_type&>;
 
     template <typename Reader>
     static auto read(Reader& r)

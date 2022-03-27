@@ -3,7 +3,7 @@
 //
 // SPDX-License-Identifier: BSD-3-Clause
 
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 #include <hrodvitnir/core/fourcc.hpp>
 
 using namespace hrodvitnir::core;

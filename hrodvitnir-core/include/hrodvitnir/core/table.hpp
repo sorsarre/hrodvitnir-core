@@ -4,6 +4,9 @@
 // SPDX-License-Identifier: BSD-3-Clause
 
 #pragma once
+#include <cstddef>
+#include <stdexcept>
+#include <vector>
 
 namespace hrodvitnir::core
 {
